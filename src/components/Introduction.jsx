@@ -19,26 +19,11 @@ class Introduction extends Component {
 
     return (
       <div className='introduction'>
-        <h1>
-          <div className='h1-typo introduction__title'>
-            {this.props.data.heading}
-          </div>
-        </h1>
-        <div className='high-light introduction__text'>
-          {(this.props.data.text) ? parse(this.props.data.text) : null}
-          {(this.props.data.multiLineTexts) ?
-            (this.props.data.multiLineTexts.map((text, i) => <p key={i}>{parse(text)}</p>)) : null}
-        </div>
-        {(this.props.data.link) ?
-          (<IconicLink
-            link={this.props.data.link}
-            dictIcons={this.props.dictIcons}
-            className='introduction__icon'
-            icon='upload'
-            iconColor='#'
-            caption={buttonText}
-          />)
-          : null}
+        <div className='h1-typo introduction__title'>{this.props.data.heading}</div>
+        <div className='high-light introduction__text'>{this.props.data.text}</div>
+        <a class='introduction__icon' target='' href='/explorer'><button class='button-primary-orange'>Explore&ensp;</button></a>
+        <br/><br/>
+        <a class='introduction__icon' target='_blank' href='https://forms.gle/DckjEmzHNE5Tj9gR8'><button class='button-primary-white'>Submit Data&ensp;</button></a>
       </div>
     );
   }

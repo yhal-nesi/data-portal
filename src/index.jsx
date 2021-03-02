@@ -22,6 +22,7 @@ import Indexing from './Indexing/Indexing';
 import IndexPage from './Index/page';
 import DataDictionary from './DataDictionary/.';
 import ReduxPrivacyPolicy from './PrivacyPolicy/ReduxPrivacyPolicy';
+import StaticProjects from './StaticProjects/ReduxStaticProjects';
 import ProjectSubmission from './Submission/ReduxProjectSubmission';
 import ReduxMapFiles from './Submission/ReduxMapFiles';
 import ReduxMapDataModel from './Submission/ReduxMapDataModel';
@@ -129,6 +130,11 @@ async function init() {
                         )
                       )
                     }
+                  />
+                  <Route
+                    exact
+                    path='/projects'
+                    component={StaticProjects}
                   />
                   <Route
                     exact
