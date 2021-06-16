@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import pluralize from 'pluralize';
 import ReactTable from 'react-table';
+import { Switch } from 'antd';
+import CheckBox from '../../components/CheckBox';
 import 'react-table/react-table.css';
 import IconicLink from '../../components/buttons/IconicLink';
 import { GuppyConfigType, TableConfigType } from '../configTypeDef';
@@ -18,11 +20,85 @@ class ExplorerTable extends React.Component {
       loading: false,
       pageSize: props.defaultPageSize,
       currentPage: 0,
+      showEmptyColumns: false,
+
+      tickBoxItems: {},
+      allSelected: false
     };
+  }
+
+  isSelectAll = () => {
+    if (this.state.allSelected) {
+      return true;
+    }
+    for (const value in this.state.tickBoxItems) {
+      if (this.state.tickBoxItems[value] == false) {
+        if (this.state.allSelected){
+          this.setState({allSelected: false});
+        }
+        return false;
+      }
+      if (!this.state.allSelected){
+        this.setState({allSelected: true});
+      }
+      return true;
+    }
+    return false;
+  }
+
+  isSelected = (key) => {
+    if (this.state.tickBoxItems[key] || this.state.allSelected) {
+      if (!this.state.tickBoxItems[key]){
+        const tbi = this.state.tickBoxItems
+        tbi[key] = true
+        this.setState({tickBoxItems: tbi})
+      }
+      return true;
+    } else {
+      this.state.tickBoxItems[key] = false;
+    }
+    return false;
+  }
+
+  toggleCheckBox = (key) => {
+    // I'm following the example from MapFiles.jsx
+    // but this "const" is getting modified
+    const tbi = this.state.tickBoxItems
+    if (this.isSelected(key)) {
+      tbi[key] = false;
+    } else {
+      tbi[key] = true;
+    }
+    this.setState({tickBoxItems: tbi});
+  }
+
+  toggleSelectAll = () => {
+    const tbi = this.state.tickBoxItems
+    if (this.state.allSelected) {
+      // want to deselect all
+      if (this.state.allSelected){
+        this.setState({allSelected: false});
+      }
+      for (const key in this.state.tickBoxItems) {
+        tbi[key] = false
+      }
+    } else {
+      // want to select all
+      if (!this.state.allSelected){
+        this.setState({allSelected: true});
+      }
+      for (const key in this.state.tickBoxItems) {
+        tbi[key] = true
+      }
+    }
+    this.setState({tickBoxItems: tbi});
   }
 
   getWidthForColumn = (field, columnName) => {
     if (this.props.tableConfig.linkFields.includes(field)) {
+      return 80;
+    }
+    if (this.props.tableConfig.tickBox.includes(field)) {
       return 80;
     }
 
@@ -126,8 +202,6 @@ class ExplorerTable extends React.Component {
         }
         // handling some special field types
         switch (field) {
-        case this.props.guppyConfig.downloadAccessor:
-          return (<div><span title={valueStr}><a href={`/files/${valueStr}`}>{valueStr}</a></span></div>);
         case 'file_size':
           return (<div><span title={valueStr}>{humanFileSize(valueStr)}</span></div>);
         case this.props.tableConfig.linkFields.includes(field) && field:
@@ -143,6 +217,21 @@ class ExplorerTable extends React.Component {
               isExternal
             />
             : null;
+        // add case for tickbox
+        case this.props.tableConfig.tickBox.includes(field) && field:
+          // perhaps could add code to disable tickbox if globus URL is populated
+          return valueStr ?
+            <CheckBox
+              //id={`${files[rowIndex].did}`}
+              id={valueStr}
+              item={valueStr}
+              isSelected={this.isSelected(valueStr) || this.allSelected}
+              onChange={() => this.toggleCheckBox(valueStr)}
+              isEnabled={true}
+            />
+            : null;
+        case this.props.guppyConfig.downloadAccessor:
+          return (<div><span title={valueStr}><a href={`/files/${valueStr}`}>{valueStr}</a></span></div>)
         default:
           return (<div><span title={valueStr}>{valueStr}</span></div>);
         }
@@ -225,13 +314,60 @@ class ExplorerTable extends React.Component {
     });
   };
 
+  /**
+   * Toggles the visibility of empty columns in the table
+   * @param checked: a boolean of showing/ hiding empty columns
+   * @sets: the state of showEmptyColumns
+   */
+  hideEmptyColumnToggle = (checked) => {
+    this.setState({ showEmptyColumns: checked });
+  };
+
+  selectAllTickBox = (checked) => {
+    this.toggleSelectAll();
+  };
+
   render() {
     if (!this.props.tableConfig.fields || this.props.tableConfig.fields.length === 0) {
       return null;
     }
     // build column configs for root table first
-    const rootColumnsConfig = this.props.tableConfig.fields.map(field =>
-      this.buildColumnConfig(field, false, false));
+    const rootColumnsConfig = this.props.tableConfig.fields.map((field) => {
+      const tempColumnConfig = this.buildColumnConfig(field, false, false);
+
+      // Sets empty columns visibility to state showEmptyColumns
+      if (this.props.rawData && this.props.rawData.length > 0) {
+        // see if any item has data in current column
+        const columnIsEmpty = this.props.rawData.every((colItem) => {
+          const colData = colItem[tempColumnConfig.id];
+          // if normal id it should have data, additional check for empty arrays
+          if (colData && (typeof colData === 'number' || colData.length > 0)) {
+            return false;
+          }
+          // check if special id with period
+          const splitIndexArr = tempColumnConfig.id.split('.');
+          if (splitIndexArr.length > 1) {
+            // check if first part matches
+            const splitColData = colItem[splitIndexArr[0]];
+            return !(splitColData && splitColData.length > 0);
+          }
+          // default true if nothing found
+          return true;
+        });
+        // hide column if it is empty
+        if (columnIsEmpty) {
+          tempColumnConfig.show = this.state.showEmptyColumns;
+        }
+      }
+      return tempColumnConfig;
+    });
+
+
+    // if not ordered sort alphabetically by Header
+    if (!this.props.tableConfig.ordered) {
+      rootColumnsConfig.sort((a, b) => a.Header.localeCompare(b.Header));
+    }
+
     const nestedArrayFieldNames = {};
     this.props.tableConfig.fields.forEach((field) => {
       if (field.includes('.')) {
@@ -276,23 +412,36 @@ class ExplorerTable extends React.Component {
     }
 
     const { totalCount } = this.props;
+    const totalCountDisplay = totalCount.toLocaleString();
     const { pageSize } = this.state;
     const totalPages = Math.floor(totalCount / pageSize) + ((totalCount % pageSize === 0) ? 0 : 1);
     const SCROLL_SIZE = 10000;
     const visiblePages = Math.min(totalPages, Math.round((SCROLL_SIZE / pageSize) + 0.49));
     const start = (this.state.currentPage * this.state.pageSize) + 1;
     const end = (this.state.currentPage + 1) * this.state.pageSize;
-    let explorerTableCaption = `Showing ${start} - ${end} of ${totalCount} ${pluralize(this.props.guppyConfig.dataType)}`;
+    let explorerTableCaption = `Showing ${start.toLocaleString()} - ${end.toLocaleString()} of ${totalCountDisplay} ${pluralize(this.props.guppyConfig.dataType)}`;
     if (totalCount < end && totalCount < 2) {
-      explorerTableCaption = `Showing ${totalCount} of ${totalCount} ${pluralize(this.props.guppyConfig.dataType)}`;
+      explorerTableCaption = `Showing ${totalCountDisplay} of ${totalCountDisplay} ${pluralize(this.props.guppyConfig.dataType)}`;
     } else if (totalCount < end && totalCount >= 2) {
-      explorerTableCaption = `Showing ${start} - ${totalCount} of ${totalCount} ${pluralize(this.props.guppyConfig.dataType)}`;
+      explorerTableCaption = `Showing ${start.toLocaleString()} - ${totalCountDisplay} of ${totalCountDisplay} ${pluralize(this.props.guppyConfig.dataType)}`;
     }
 
     return (
       <div className={`explorer-table ${this.props.className}`}>
         {(this.props.isLocked) ? <React.Fragment />
-          : <p className='explorer-table__description'>{explorerTableCaption}</p> }
+          : <div className='explorer-table__description'>
+            <span>
+              {explorerTableCaption}
+            </span>
+            Select All 
+            <CheckBox
+              id={"my_great_select_all"}
+              isEnabled={true}
+              isSelected={this.isSelectAll()}
+              onChange={this.toggleSelectAll}
+            />
+          </div>}
+
         <ReactTable
           columns={rootColumnsConfig}
           manual
