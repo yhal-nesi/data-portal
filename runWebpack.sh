@@ -50,7 +50,7 @@ gitops_config() {
   local portalApp
   local portalGitopsFolder
 
-  gitRepo="cdis-manifest"
+  gitRepo="cdis-configurations"
   hostname="$1"
   shift
 
