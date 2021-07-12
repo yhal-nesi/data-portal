@@ -43,18 +43,9 @@ class Introduction extends Component {
             ? (this.props.data.multiLineTexts
               .map((text, i) => <p key={i}>{parse(text)}</p>)) : null}
         </div>
-        {(shouldDisplaySubmissionButton)
-          ? (
-            <IconicLink
-              link={this.props.data.link}
-              dictIcons={this.props.dictIcons}
-              className='introduction__icon'
-              icon='upload'
-              iconColor='#'
-              caption={buttonText}
-            />
-          )
-          : null}
+        <a className='introduction__icon' target='' href='/explorer'><button className='button-primary-orange'>Explore&ensp;</button></a>
+        <br/><br/>
+        <a className='introduction__icon' target='_blank' href='https://forms.gle/DckjEmzHNE5Tj9gR8'><button className='button-primary-white'>Submit Data&ensp;</button></a>
       </div>
     );
   }
