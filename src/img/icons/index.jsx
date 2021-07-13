@@ -43,6 +43,13 @@ import IcoAcctAccess from './acct-icons/acct-access.svg';
 import IcoAcctExplore from './acct-icons/acct-explore.svg';
 import IcoAcctAnalyze from './acct-icons/acct-analyze.svg';
 
+import IcoMBook25 from './iconmonstr/iconmonstr-book-25.svg';
+import IcoMLayer11 from './iconmonstr/iconmonstr-layer-11.svg';
+import IcoMLayer21 from './iconmonstr/iconmonstr-layer-21.svg';
+import IcoMSpeech29 from './iconmonstr/iconmonstr-speech-bubble-29.svg';
+import IcoMFingerprint7 from './iconmonstr/iconmonstr-fingerprint-7.svg';
+
+
 const dictIcons = {
   analysis: (height, customedStyles) => (
     <IcoAnalysis
@@ -184,6 +191,22 @@ const dictIcons = {
       height={height}
       style={{ ...customedStyles }}
     />
+  ),
+
+  icombook25: (height, customedStyles) => (
+    <IcoMBook25 height={height} style={{ ...customedStyles }} />
+  ),
+  icomlayer11: (height, customedStyles) => (
+    <IcoMLayer11 height={height} style={{ ...customedStyles }} />
+  ),
+  icomlayer21: (height, customedStyles) => (
+    <IcoMLayer21 height={height} style={{ ...customedStyles }} />
+  ),
+  icomspeech29: (height, customedStyles) => (
+    <IcoMSpeech29 height={height} style={{ ...customedStyles }} />
+  ),
+  icomfingerprint7: (height, customedStyles) => (
+    <IcoMFingerprint7 height={height} style={{ ...customedStyles }} />
   ),
 };
 
