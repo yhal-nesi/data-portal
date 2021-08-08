@@ -43,7 +43,7 @@ class Introduction extends Component {
             ? (this.props.data.multiLineTexts
               .map((text, i) => <p key={i}>{parse(text)}</p>)) : null}
         </div>
-        <a className='introduction__icon' target='' href='/explorer'><button className='button-primary-orange'>Explore&ensp;</button></a>
+        <a className='introduction__icon' target='' href='/study-viewer/project'><button className='button-primary-orange'>Projects&ensp;</button></a>
         <br/><br/>
         <a className='introduction__icon' target='_blank' href='https://forms.gle/DckjEmzHNE5Tj9gR8'><button className='button-primary-white'>Submit Data&ensp;</button></a>
       </div>
