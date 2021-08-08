@@ -46,6 +46,24 @@ h1 {
         font-size: 12px;
 }
 
+/* study viewer */
+.study-viewer__title {
+  font-size: 48px;
+}
+
+.study-viewer__card {
+  border: none;
+}
+
+.ant-card-head {
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.ant-descriptions-bordered .ant-descriptions-view {
+  border: none;
+}
+
 /* background colours */
 .protected-content {
   background-color: white;

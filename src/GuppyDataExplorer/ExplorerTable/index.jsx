@@ -142,9 +142,14 @@ class ExplorerTable extends React.Component {
                 icon='exit'
                 dictIcons={dictIcons}
                 iconColor='#606060'
-                target='_blank'
                 isExternal
               />
+            )
+            : null;
+        case this.props.tableConfig.applyFields.includes(field) && field:
+          return valueStr
+            ? (
+              <a href={valueStr}>Apply for access</a>
             )
             : null;
         default:
