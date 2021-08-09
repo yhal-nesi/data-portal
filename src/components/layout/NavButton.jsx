@@ -12,6 +12,7 @@ const NavButton = ({
     return (
       <a
         href={item.link}
+        target='_blank'
         className={'body-typo nav-button'}
       >
         <div className='nav-button__icon'>
