@@ -44,11 +44,10 @@ class Introduction extends Component {
             ? (this.props.data.multiLineTexts
               .map((text, i) => <p key={i}>{parse(text)}</p>)) : null}
         </div>
-        <Button
-          label={'Projects'}
-          buttonType='primary-orange'
+        <button
+          className='button-primary-orange'
           onClick={() => this.props.history.push('/study-viewer/project')}
-        />
+        >Projects</button>
         <br/><br/>
         <a className='introduction__icon' target='_blank' href='https://forms.gle/DckjEmzHNE5Tj9gR8'><button className='button-primary-white'>Submit Data&ensp;</button></a>
       </div>
