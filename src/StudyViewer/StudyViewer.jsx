@@ -113,6 +113,9 @@ class StudyViewer extends React.Component {
         <div className='h2-typo study-viewer__title'>
           {studyViewerConfig.title}
         </div>
+        <div className='study-viewer__intro'>
+          <p>Genomics Aotearoa has partnered with the New Zealand eScience Infrastructure (NeSI) to develop a national genomic data archive, to support research in Aotearoa New Zealand. Data storage and access is managed within a <a href="https://www.genomics-aotearoa.org.nz/about/genomics-and-maori">Māori values context</a>, and follows the principles of <a href="https://www.temanararaunga.maori.nz/">Māori Data Sovereignty.</a></p>
+        </div>
         {(datasets.length > 0)
           ? (
             <Space className='study-viewer__space' direction='vertical'>
