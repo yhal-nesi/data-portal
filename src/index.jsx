@@ -12,6 +12,9 @@ import ReactGA from 'react-ga';
 import { Helmet } from 'react-helmet';
 import { datadogRum } from '@datadog/browser-rum';
 
+import StaticAbout from './StaticPages/StaticAbout';
+import StaticKakapo from './StaticPages/StaticKakapo';
+
 import 'antd/dist/antd.css';
 import '@gen3/ui-component/dist/css/base.less';
 import { fetchAndSetCsrfToken } from './configs';
@@ -328,6 +331,17 @@ async function init() {
                         />
                       )
                     }
+                  />
+
+                  <Route
+                    exact
+                    path='/about'
+                    component={StaticAbout}
+                  />
+                  <Route
+                    exact
+                    path='/TAONGA-KAKAPO'
+                    component={StaticKakapo}
                   />
                   <Route
                     exact
