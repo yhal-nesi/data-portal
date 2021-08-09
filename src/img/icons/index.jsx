@@ -48,6 +48,7 @@ import IcoMLayer11 from './iconmonstr/iconmonstr-layer-11.svg';
 import IcoMLayer21 from './iconmonstr/iconmonstr-layer-21.svg';
 import IcoMSpeech29 from './iconmonstr/iconmonstr-speech-bubble-29.svg';
 import IcoMFingerprint7 from './iconmonstr/iconmonstr-fingerprint-7.svg';
+import IcoMHelp4 from './iconmonstr/iconmonstr-help-4.svg';
 
 
 const dictIcons = {
@@ -207,6 +208,9 @@ const dictIcons = {
   ),
   icomfingerprint7: (height, customedStyles) => (
     <IcoMFingerprint7 height={height} style={{ ...customedStyles }} />
+  ),
+  icomhelp4: (height, customedStyles) => (
+    <IcoMHelp4 height={height} style={{ ...customedStyles }} />
   ),
 };
 

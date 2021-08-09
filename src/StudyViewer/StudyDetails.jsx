@@ -346,7 +346,13 @@ class StudyDetails extends React.Component {
                  {(Object.entries(this.props.data.tableData).map(([k, v]) => {
                    let value = [];
                    if (_.isArray(v)) {
-                     value = v;
+                     let updated = [];
+                     let last = v.pop();
+                     v.map((a) => {
+                       updated.push(a + ", ");
+                     });
+                     updated.push(last);
+                     value = updated;
                    } else {
                      value.push(v);
                    }
@@ -366,6 +372,8 @@ class StudyDetails extends React.Component {
                                </div>
                              );
                            }
+                           return item;
+                         } else if (Number.isInteger(item)) {
                            return item;
                          }
                          if (!item) {

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import parse from 'html-react-parser';
 import IconicLink from './buttons/IconicLink';
 import './Introduction.less';
@@ -43,7 +44,10 @@ class Introduction extends Component {
             ? (this.props.data.multiLineTexts
               .map((text, i) => <p key={i}>{parse(text)}</p>)) : null}
         </div>
-        <a className='introduction__icon' target='' href='/study-viewer/project'><button className='button-primary-orange'>Projects&ensp;</button></a>
+        <button
+          className='button-primary-orange'
+          onClick={() => this.props.history.push('/study-viewer/project')}
+        >Projects</button>
         <br/><br/>
         <a className='introduction__icon' target='_blank' href='https://forms.gle/DckjEmzHNE5Tj9gR8'><button className='button-primary-white'>Submit Data&ensp;</button></a>
       </div>
@@ -57,4 +61,4 @@ Introduction.propTypes = {
   userAuthMapping: PropTypes.object.isRequired,
 };
 
-export default Introduction;
+export default withRouter(Introduction);
