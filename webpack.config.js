@@ -206,8 +206,9 @@ module.exports = {
     disableHostCheck: true,
     compress: true,
     hot: true,
-    port: 9443,
-    https: true,
+    host: '0.0.0.0',
+    port: 80,
+    https: false,
   },
   module: {
     rules: [{
