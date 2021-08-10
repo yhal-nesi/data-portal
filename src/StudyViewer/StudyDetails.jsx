@@ -328,7 +328,7 @@ class StudyDetails extends React.Component {
                <div>
                  {(Object.entries(this.props.data.blockData).map(([k, v]) => (
                    <div key={k}>
-                     <div className='h3-typo'>{this.getLabel(k)}</div>
+                     <div className='h4-typo'>{this.getLabel(k)}</div>
                      <Paragraph>
                        {v}
                      </Paragraph>
