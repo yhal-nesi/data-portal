@@ -82,6 +82,35 @@ h1 {
   background-color: white;
 }
 
+/* study viewer */
+.study-viewer {
+    max-width: 85%;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 40px 20px;
+}
+
+.study-viewer__intro {
+    padding-top: 40px;
+}
+
+.study-viewer__card {
+    width: 100%;
+    border: 1px solid #c3c3c3;
+}
+
+.ant-card-head-title {
+    padding: 8px 0;
+}
+
+.ant-card-head {
+    font-size: 20px;
+}
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+    padding: 0px 16px;
+}
+
 /* intro page */
 .agdr-index-header {
     background-repeat: no-repeat;
