@@ -336,6 +336,20 @@ class StudyDetails extends React.Component {
                  )))}
                </div>
              ) : null }
+           {(this.props.data.applicationData)
+             ? (
+               <div>
+                 {(Object.entries(this.props.data.applicationData).map(([k, v]) => (
+                   <div key={k}>
+                     <a href={v} target="_blank">
+                     <button
+                       className='button-primary-orange'
+                     >Projects</button>
+                     </a>
+                   </div>
+                 )))}
+               </div>
+             ) : null }
            {(this.props.data.tableData)
              ? (
                <Descriptions
@@ -419,6 +433,7 @@ StudyDetails.propTypes = {
     title: PropTypes.string.isRequired,
     rowAccessorValue: PropTypes.string.isRequired,
     blockData: PropTypes.object,
+    applicationData: PropTypes.object,
     tableData: PropTypes.object,
     displayButtonsData: PropTypes.object,
     accessibleValidationValue: PropTypes.string,
