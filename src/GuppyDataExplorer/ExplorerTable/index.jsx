@@ -28,6 +28,10 @@ class ExplorerTable extends React.Component {
       return 80;
     }
 
+    if (this.props.tableConfig.applyFields.includes(field)) {
+      return 150;
+    }
+
     // some magic numbers that work fine for table columns width
     const minWidth = 100;
     const maxWidth = 400;
