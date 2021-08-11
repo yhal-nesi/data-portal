@@ -153,7 +153,7 @@ class ExplorerTable extends React.Component {
         case this.props.tableConfig.applyFields.includes(field) && field:
           return valueStr
             ? (
-              <a href={valueStr}>Apply for access</a>
+              <a href={valueStr} target="_blank">Apply for access</a>
             )
             : null;
         default:
