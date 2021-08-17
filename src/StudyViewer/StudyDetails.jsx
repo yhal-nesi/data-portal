@@ -344,7 +344,7 @@ class StudyDetails extends React.Component {
                      <a href={v} target="_blank">
                      <button
                        className='button-primary-orange'
-                     >Projects</button>
+                     >Apply for access</button>
                      </a>
                    </div>
                  )))}
