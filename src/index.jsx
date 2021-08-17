@@ -526,7 +526,7 @@ async function init() {
                   />
                   <Route
                     exact
-                    path='/:project/submission'
+                    path='/:project'
                     component={
                       (props) => (
                         <ProtectedContent
