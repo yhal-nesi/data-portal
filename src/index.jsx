@@ -14,6 +14,11 @@ import { datadogRum } from '@datadog/browser-rum';
 
 import StaticAbout from './StaticPages/StaticAbout';
 import StaticKakapo from './StaticPages/StaticKakapo';
+import StaticKeakaka from './StaticPages/StaticKeakaka';
+import StaticTrevally from './StaticPages/StaticTrevally';
+import StaticLamprey from './StaticPages/StaticLamprey';
+import StaticLamprey2 from './StaticPages/StaticLamprey2';
+import StaticLamprey3 from './StaticPages/StaticLamprey3';
 
 import 'antd/dist/antd.css';
 import '@gen3/ui-component/dist/css/base.less';
@@ -343,6 +348,32 @@ async function init() {
                     path='/TAONGA-KAKAPO'
                     component={StaticKakapo}
                   />
+                  <Route
+                    exact
+                    path='/TAONGA-KEAKAKA'
+                    component={StaticKeakaka}
+                  />
+                  <Route
+                    exact
+                    path='/TAONGA-TREVALLY'
+                    component={StaticTrevally}
+                  />
+                  <Route
+                    exact
+                    path='/TAONGA-LAMPREY'
+                    component={StaticLamprey}
+                  />
+                  <Route
+                    exact
+                    path='/TAONGA-LAMPREY/collection/TLCMC00005-00002'
+                    component={StaticLamprey2}
+                  />
+                  <Route
+                    exact
+                    path='/TAONGA-LAMPREY/collection/TLCMC00005-00003'
+                    component={StaticLamprey3}
+                  />
+
                   <Route
                     exact
                     path='/workspace'
