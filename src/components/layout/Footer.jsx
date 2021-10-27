@@ -38,6 +38,7 @@ class Footer extends Component {
               </div>
             )
             : null}
+          <div className="footer__privacy-security">Aotearoa Genomic Data Repository is hosted on NeSI. NeSI's <a href="https://www.nesi.org.nz/nesi-privacy-policy" target="_blank">privacy policy</a></div>
           <div className='footer__logo-area'>
             {
               this.props.logos.map((logoObj, i) => (

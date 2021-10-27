@@ -66,6 +66,7 @@ import ErrorWorkspacePlaceholder from './Workspace/ErrorWorkspacePlaceholder';
 import { ReduxStudyViewer, ReduxSingleStudyViewer } from './StudyViewer/reduxer';
 import NotFound from './components/NotFound';
 
+
 // monitor user's session
 sessionMonitor.start();
 workspaceSessionMonitor.start();
