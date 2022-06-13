@@ -53,7 +53,7 @@ gitops_config() {
   local portalApp
   local portalGitopsFolder
 
-  gitRepo="cdis-manifest"
+  gitRepo="nesi-cdis-manifest"
   hostname="$1"
   shift
 

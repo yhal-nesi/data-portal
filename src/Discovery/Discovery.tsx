@@ -69,7 +69,7 @@ const accessibleDataFilterToggle = () => {
   }
 };
 
-export const renderFieldContent = (content: any, contentType: 'string'|'paragraphs'|'number'|'link'|'tags' = 'string', config: DiscoveryConfig): React.ReactNode => {
+export const renderFieldContent = (content: any, contentType: 'string'|'paragraphs'|'number'|'link'|'button'|'tags' = 'string', config: DiscoveryConfig): React.ReactNode => {
   switch (contentType) {
   case 'string':
     if (Array.isArray(content)) {
@@ -95,6 +95,19 @@ export const renderFieldContent = (content: any, contentType: 'string'|'paragrap
         {content}
       </a>
     );
+  case 'button':
+    return (
+      <div>
+          <div key={content}>
+            <a href={content} target="_blank">
+            <button
+              className='button-primary-orange'
+            >Apply for access</button>
+            </a>
+          </div>
+      </div>
+    );
+ 
   case 'tags':
     if (!content || !content.map) {
       return null;

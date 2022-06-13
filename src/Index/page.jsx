@@ -85,6 +85,8 @@ class IndexPageComponent extends React.Component {
 
     return (
       <div className='index-page'>
+        <div class="agdr-index-header"></div>
+        <div class="agdr-index-header__attribution">kākāpō chick <a target="_blank" href="https://www.flickr.com/photos/docnz/8528282263/">photo</a> by Dianne Mason, 2009 <a target="_blank" href="https://creativecommons.org/licenses/by/2.0/">CC2.0</a></div>
         <div className='index-page__top'>
           <div className='index-page__introduction'>
             <ReduxIntroduction data={components.index.introduction} dictIcons={dictIcons} />

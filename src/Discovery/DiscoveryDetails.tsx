@@ -180,7 +180,7 @@ const DiscoveryDetails = (props: Props) => {
     <Drawer
       className='discovery-modal'
       visible={props.modalVisible}
-      width={'50vw'}
+      width={'80vmax'}
       closable={false}
       onClose={() => props.setModalVisible(false)}
     >

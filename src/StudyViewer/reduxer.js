@@ -139,6 +139,7 @@ const processDataset = (nameOfIndex, receivedData, itemConfig, displayButtonsFie
           processedItem.title = dataElement[targetStudyViewerConfig.titleField];
           processedItem.rowAccessorValue = dataElement[targetStudyViewerConfig.rowAccessor];
           processedItem.blockData = _.pick(dataElement, itemConfig.blockFields);
+          processedItem.applicationData = _.pick(dataElement, itemConfig.applicationFields);
           processedItem.tableData = removeEmptyFields(_.pick(dataElement, itemConfig.tableFields), itemConfig.hideEmptyFields);
           processedItem.displayButtonsData = _.pick(dataElement, displayButtonsFields);
           processedItem.accessibleValidationValue = dataElement.auth_resource_path;
@@ -181,6 +182,7 @@ export const fetchDataset = (dataType, rowAccessorValue) => {
   fieldsToFetch = [
     ...fieldsToFetch,
     ...itemConfig.blockFields,
+    ...itemConfig.applicationFields,
     ...itemConfig.tableFields,
     ...displayButtonsFields,
   ];

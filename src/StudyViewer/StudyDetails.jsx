@@ -348,10 +348,24 @@ class StudyDetails extends React.Component {
                <div>
                  {(Object.entries(this.props.data.blockData).map(([k, v]) => (
                    <div key={k}>
-                     <div className='h3-typo'>{this.getLabel(k)}</div>
+                     <div className='h4-typo'>{this.getLabel(k)}</div>
                      <Paragraph>
                        {v}
                      </Paragraph>
+                   </div>
+                 )))}
+               </div>
+             ) : null }
+           {(this.props.data.applicationData)
+             ? (
+               <div>
+                 {(Object.entries(this.props.data.applicationData).map(([k, v]) => (
+                   <div key={k}>
+                     <a href={v} target="_blank">
+                     <button
+                       className='button-primary-orange'
+                     >Apply for access</button>
+                     </a>
                    </div>
                  )))}
                </div>
@@ -366,7 +380,13 @@ class StudyDetails extends React.Component {
                  {(Object.entries(this.props.data.tableData).map(([k, v]) => {
                    let value = [];
                    if (_.isArray(v)) {
-                     value = v;
+                     let updated = [];
+                     let last = v.pop();
+                     v.map((a) => {
+                       updated.push(a + ", ");
+                     });
+                     updated.push(last);
+                     value = updated;
                    } else {
                      value.push(v);
                    }
@@ -433,6 +453,7 @@ StudyDetails.propTypes = {
     title: PropTypes.string.isRequired,
     rowAccessorValue: PropTypes.string.isRequired,
     blockData: PropTypes.object,
+    applicationData: PropTypes.object,
     tableData: PropTypes.object,
     displayButtonsData: PropTypes.object,
     accessibleValidationValue: PropTypes.string,
