@@ -89,7 +89,7 @@
   font-size: 40px;
   font-size: 14px;
   line-height: 50px;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .discovery-header__tags-container {
@@ -107,7 +107,7 @@
   cursor: default;
   font-weight: normal;
   font-size: 1.125rem;
-  text-transform: uppercase;
+  text-transform: none;
   color: #555;
 }
 
@@ -224,7 +224,7 @@
 
 .discovery-table-header {
   font-size: 14px;
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: 700;
 }
 
@@ -394,7 +394,7 @@
 
 .discovery-modal__close-button {
   color: var(--g3-color__base-blue);
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: 700;
 }
 
@@ -437,7 +437,7 @@
 .discovery-modal__attribute-name {
   margin-right: 7px;
   padding: 4px;
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: bold;
 }
 
@@ -491,7 +491,7 @@
 }
 
 .discovery-modal__download-panel-header {
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: bold;
   font-size: 12px;
   background: #dfe3e2;

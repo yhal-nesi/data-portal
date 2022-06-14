@@ -223,17 +223,7 @@ module.exports = {
     compress: true,
     hot: true,
     port: 9443,
-    server: 'https',
-    host: 'localhost',
-    allowedHosts: [
-      '.planx-pla.net',
-    ],
-    client: {
-      overlay: {
-        warnings: false,
-        errors: true,
-      },
-    },
+    https: true,
   },
   module: {
     rules: [{

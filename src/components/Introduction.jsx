@@ -48,7 +48,8 @@ class Introduction extends Component {
         </div>
         <button
           className='button-primary-orange'
-          onClick={() => this.props.history.push('/study-viewer/project')}
+          //onClick={() => this.props.history.push('/study-viewer/project')}
+          onClick={() => this.props.history.push('/discovery')}
         >Projects</button>
         <br/><br/>
         <a className='introduction__icon' target='_blank' href='https://forms.gle/DckjEmzHNE5Tj9gR8'><button className='button-primary-white'>Submit Data&ensp;</button></a>

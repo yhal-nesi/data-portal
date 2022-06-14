@@ -120,15 +120,15 @@
   {
       "tabTitle": "Experiments",
       "charts": {
-        "organisms": {
+        "_organisms_count": {
           "chartType": "pie",
           "title": "Sample Organisms"
         },
-        "populations": {
+        "_populations_count": {
           "chartType": "pie",
           "title": "Sample Population Genomics"
         },
-        "metagenomes": {
+        "_metagenomes_count": {
           "chartType": "pie",
           "title": "Sample Metagenomics"
         }
@@ -348,6 +348,7 @@
           "referenceIdFieldInResourceIndex": "object_id",
           "referenceIdFieldInDataIndex": "object_id"
         },
+       "tierAccessLevel": "libre",
         "accessibleFieldCheckList": ["project_id"],
         "accessibleValidationField": "project_id",
         "downloadAccessor": "object_id"
@@ -553,7 +554,7 @@
       }
     ]
   },
- 
+
 
   "minimalFieldMapping": {
     "tagsListFieldName": "tags",
@@ -591,5 +592,5 @@
 
 "useArboristUI": true
 
-  
+
 }

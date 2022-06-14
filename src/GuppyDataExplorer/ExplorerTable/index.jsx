@@ -29,6 +29,14 @@ class ExplorerTable extends React.Component {
       return 80;
     }
 
+    if (this.props.tableConfig.studyProjectFields.includes(field)) {
+      return 150;
+    }
+
+    if (this.props.tableConfig.applyFields.includes(field)) {
+      return 150;
+    }
+
     // some magic numbers that work fine for table columns width
     const minWidth = 100;
     const maxWidth = 400;
@@ -157,6 +165,21 @@ class ExplorerTable extends React.Component {
                 target='_blank'
                 isExternal
               />
+            )
+            : null;
+        case this.props.tableConfig.studyProjectFields.includes(field) && field:
+          return valueStr
+            ? (
+              <a
+                href={'discovery/TAONGA-' + valueStr}
+                onClick={() => this.props.history.push('discovery/TAONGA-' + valueStr)}
+              >{valueStr}</a>
+            )
+            : null;
+        case this.props.tableConfig.applyFields.includes(field) && field:
+          return valueStr
+            ? (
+              <a href={valueStr} target="_blank">Apply for access</a>
             )
             : null;
         default:

@@ -240,6 +240,8 @@ class ExplorerVisualization extends React.Component {
                 ordered: tableColumnsOrdered,
                 linkFields: this.props.tableConfig.linkFields || [],
                 dicomViewerId: this.props.tableConfig.dicomViewerId,
+                applyFields: this.props.tableConfig.applyFields || [],
+                studyProjectFields: this.props.tableConfig.studyProjectFields || [],
               }}
               fetchAndUpdateRawData={this.props.fetchAndUpdateRawData}
               rawData={this.props.rawData}
