@@ -59,7 +59,6 @@ StudyCard.propTypes = {
     title: PropTypes.string.isRequired,
     rowAccessorValue: PropTypes.string.isRequired,
     blockData: PropTypes.object,
-    applicationData: PropTypes.object,
     tableData: PropTypes.object,
     accessibleValidationValue: PropTypes.string,
     fileData: PropTypes.array,

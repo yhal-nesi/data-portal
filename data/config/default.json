@@ -366,50 +366,6 @@
     }
   ],
 
-  "discoveryConfig" : {
-    "requireLogin": false,
-    "public": true,
-    "features": {
-      "pageTitle": {
-        "enabled": true,
-        "text": "My special test discovery page"
-      }
-    }
-  },
-
-  "studyViewerConfig": [{
-    "dataType": "core_metadata_collection",
-    "title": "Collections",
-    "titleField": "submitter_id",
-    "listItemConfig": {
-        "blockFields": ["project_id", "globus_url", "creator"],
-        "tableFields": []
-    },
-    "fieldMapping": [],
-    "rowAccessor": "submitter_id",
-    "openMode": "open-all",
-    "openFirstRowAccessor": "",
-    "buttons": [
-    ]
-},{
-    "dataType": "project",
-    "title": "Projects",
-    "titleField": "name",
-    "listItemConfig": {
-        "blockFields": ["details", "investigator_name", "contact", "investigator_affiliation", "support_source"],
-        "tableFields": ["sample_organism", "experiments", "raw_files_count", "processed_files_count"],
-        "customFields": ["application_form", "citation_placeholder"],
-        "applicationFields": ["application_form"]
-    },
-    "fieldMapping": [],
-    "rowAccessor": "dbgap_accession_number",
-    "openMode": "open-first",
-    "openFirstRowAccessor": "",
-    "buttons": []
-}],
-
-
-
 
 "discoveryConfig": {
   "requireLogin": false,
@@ -427,7 +383,7 @@
         "enabled": true,
         "inputSubtitle": "Search Bar",
         "placeholder": "Search by keyword",
-        "searchableTextFields": ["citation", "project_details", "investigator_affiliation", "name", "support_source", "title", "sample_organism", "sample_organism_common_name", "sample_organism_maori_name", "keywords" ]
+        "searchableTextFields": ["citation", "project_details", "investigator_affiliation", "name", "support_source", "title", "sample_organism", "sample_organism_common_name", "sample_organism_maori_name", "keywords", "investigator_name", "code", "project_id" ]
       },
       "tagSearchDropdown": {
         "enabled": false

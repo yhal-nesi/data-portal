@@ -36,7 +36,7 @@ RUN mkdir -p /data-portal
 COPY . /data-portal
 WORKDIR /data-portal
 RUN COMMIT=`git rev-parse HEAD` && echo "export const portalCommit = \"${COMMIT}\";" >src/versions.js \
-    && VERSION=`git describe --always --tags` && echo "export const portalVersion =\"${VERSION}\";" >>src/versions.js \
+    && VERSION=`cat nesi_version.txt` && echo "export const portalVersion =\"${VERSION}\";" >>src/versions.js \
     && /bin/rm -rf .git \
     && /bin/rm -rf node_modules
 RUN npm config set unsafe-perm=true \
