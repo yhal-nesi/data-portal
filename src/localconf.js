@@ -23,7 +23,6 @@ function buildConfig(opts) {
     hostname: typeof window !== 'undefined' ? `${window.location.protocol}//${window.location.hostname}/` : 'http://localhost/',
     fenceURL: process.env.FENCE_URL,
     indexdURL: process.env.INDEXD_URL,
-    cohortMiddlewareURL: process.env.COHORT_MIDDLEWARE_URL,
     arboristURL: process.env.ARBORIST_URL,
     wtsURL: process.env.WTS_URL,
     workspaceURL: process.env.WORKSPACE_URL,
@@ -41,9 +40,8 @@ function buildConfig(opts) {
   // Override default basename if loading via /dev.html
   // dev.html loads bundle.js via https://localhost...
   //
-  const ensureTrailingSlashBasename = `${defaults.basename}${defaults.basename.endsWith('/') ? '' : '/'}`;
-  if (typeof window.location !== 'undefined' && window.location.pathname.indexOf(`${ensureTrailingSlashBasename}dev.html`) === 0) {
-    defaults.basename = `${ensureTrailingSlashBasename}dev.html`;
+  if (typeof window.location !== 'undefined' && window.location.pathname.indexOf(`${defaults.basename}dev.html`) === 0) {
+    defaults.basename += 'dev.html';
   }
 
   const {
@@ -56,7 +54,6 @@ function buildConfig(opts) {
     hostname,
     fenceURL,
     indexdURL,
-    cohortMiddlewareURL,
     arboristURL,
     wtsURL,
     workspaceURL,
@@ -87,7 +84,6 @@ function buildConfig(opts) {
   const credentialCdisPath = `${userAPIPath}credentials/cdis/`;
   const coreMetadataPath = `${hostname}coremetadata/`;
   const indexdPath = typeof indexdURL === 'undefined' ? `${hostname}index/` : ensureTrailingSlash(indexdURL);
-  const cohortMiddlewarePath = typeof cohortMiddlewareURL === 'undefined' ? `${hostname}cohort-middleware/` : ensureTrailingSlash(cohortMiddlewareURL);
   const wtsPath = typeof wtsURL === 'undefined' ? `${hostname}wts/oauth2/` : ensureTrailingSlash(wtsURL);
   const externalLoginOptionsUrl = `${hostname}wts/external_oidc/`;
   let login = {
@@ -100,12 +96,11 @@ function buildConfig(opts) {
   const logoutInactiveUsers = !(process.env.LOGOUT_INACTIVE_USERS === 'false');
   const useIndexdAuthz = !(process.env.USE_INDEXD_AUTHZ === 'false');
   const workspaceTimeoutInMinutes = process.env.WORKSPACE_TIMEOUT_IN_MINUTES || 480;
-  const graphqlSchemaUrl = `${hostname}${(basename && basename !== '/') ? basename : ''}/data/schema.json`;
+  const graphqlSchemaUrl = `${hostname}data/schema.json`;
   const workspaceUrl = typeof workspaceURL === 'undefined' ? '/lw-workspace/' : ensureTrailingSlash(workspaceURL);
   const workspaceErrorUrl = '/no-workspace-access/';
   const workspaceOptionsUrl = `${workspaceUrl}options`;
   const workspaceStatusUrl = `${workspaceUrl}status`;
-  const workspacePayModelUrl = `${workspaceUrl}paymodels`;
   const workspaceTerminateUrl = `${workspaceUrl}terminate`;
   const workspaceLaunchUrl = `${workspaceUrl}launch`;
   const datasetUrl = `${hostname}api/search/datasets`;
@@ -198,11 +193,6 @@ function buildConfig(opts) {
 
   const { dataAvailabilityToolConfig } = config;
 
-  let showSystemUse = false;
-  if (components.systemUse && components.systemUse.systemUseText) {
-    showSystemUse = true;
-  }
-
   let showArboristAuthzOnProfile = false;
   if (config.showArboristAuthzOnProfile) {
     showArboristAuthzOnProfile = config.showArboristAuthzOnProfile;
@@ -211,11 +201,6 @@ function buildConfig(opts) {
   let showFenceAuthzOnProfile = true;
   if (config.showFenceAuthzOnProfile === false) {
     showFenceAuthzOnProfile = config.showFenceAuthzOnProfile;
-  }
-
-  let showExternalLoginsOnProfile = false;
-  if (config.showExternalLoginsOnProfile === true) {
-    showExternalLoginsOnProfile = config.showExternalLoginsOnProfile;
   }
 
   let hideSubmissionIfIneligible = false;
@@ -394,13 +379,6 @@ function buildConfig(opts) {
             image: '/src/img/analysis-icons/gwas.svg',
           };
           break;
-        case 'GWASUIApp':
-          analysisApps.GWASUIApp = {
-            title: 'GWAS UI',
-            description: 'Advanced GWAS UI',
-            image: '/src/img/analysis-icons/gwas.svg',
-          };
-          break;
         default:
           break;
         }
@@ -444,7 +422,6 @@ function buildConfig(opts) {
     credentialCdisPath,
     coreMetadataPath,
     indexdPath,
-    cohortMiddlewarePath,
     graphqlPath,
     dataDictionaryTemplatePath,
     graphqlSchemaUrl,
@@ -462,7 +439,6 @@ function buildConfig(opts) {
     workspaceErrorUrl,
     workspaceOptionsUrl,
     workspaceStatusUrl,
-    workspacePayModelUrl,
     workspaceLaunchUrl,
     workspaceTerminateUrl,
     homepageChartNodes: components.index.homepageChartNodes,
@@ -480,7 +456,6 @@ function buildConfig(opts) {
     externalLoginOptionsUrl,
     showArboristAuthzOnProfile,
     showFenceAuthzOnProfile,
-    showExternalLoginsOnProfile,
     hideSubmissionIfIneligible,
     useArboristUI,
     terraExportWarning,
@@ -519,7 +494,6 @@ function buildConfig(opts) {
     ddClientToken,
     ddEnv,
     ddSampleRate,
-    showSystemUse,
   };
 }
 

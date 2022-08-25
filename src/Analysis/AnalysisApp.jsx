@@ -6,7 +6,6 @@ import Button from '@gen3/ui-component/dist/components/Button';
 import BackLink from '../components/BackLink';
 import HIVCohortFilter from '../HIVCohortFilter/HIVCohortFilter';
 import ReduxGWASApp from './GWASApp/ReduxGWASApp';
-import ReduxGWASUIApp from './GWASUIApp/ReduxGWASUIApp';
 import { analysisApps } from '../localconf';
 import './AnalysisApp.css';
 
@@ -32,7 +31,6 @@ class AnalysisApp extends React.Component {
       this.fetchJobResult()
         .then((res) => ({ results: `${res.data.output}`.split('\n') }));
     }
-    return null;
   }
 
   componentWillUnmount() {
@@ -74,10 +72,6 @@ class AnalysisApp extends React.Component {
     case 'GWASApp':
       return (
         <ReduxGWASApp />
-      );
-    case 'GWASUIApp':
-      return (
-        <ReduxGWASUIApp />
       );
     default:
       return (

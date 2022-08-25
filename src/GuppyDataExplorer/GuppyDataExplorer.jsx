@@ -129,7 +129,6 @@ class GuppyDataExplorer extends React.Component {
           <ExplorerFilter
             className='guppy-data-explorer__filter'
             guppyConfig={this.props.guppyConfig}
-            extraAggsFields={Object.keys(this.props.chartConfig)}
             getAccessButtonLink={this.props.getAccessButtonLink}
             hideGetAccessButton={this.props.hideGetAccessButton}
             tierAccessLevel={this.props.tierAccessLevel}
@@ -144,7 +143,6 @@ class GuppyDataExplorer extends React.Component {
             heatMapConfig={this.props.heatMapConfig}
             guppyConfig={this.props.guppyConfig}
             history={this.props.history}
-            location={this.props.location}
             nodeCountTitle={
               this.props.guppyConfig.nodeCountTitle
               || labelToPlural(this.props.guppyConfig.dataType, true)
@@ -171,7 +169,6 @@ GuppyDataExplorer.propTypes = {
   getAccessButtonLink: PropTypes.string,
   hideGetAccessButton: PropTypes.bool,
   adminAppliedPreFilters: PropTypes.object,
-  location: PropTypes.object.isRequired,
 };
 
 GuppyDataExplorer.defaultProps = {

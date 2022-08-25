@@ -18,12 +18,7 @@ import 'antd/dist/antd.css';
 import '@gen3/ui-component/dist/css/base.less';
 import { fetchAndSetCsrfToken } from './configs';
 import {
-  fetchDictionary,
-  fetchSchema,
-  fetchVersionInfo,
-  fetchUserAccess,
-  fetchUserAuthMapping,
-  updateSystemUseNotice,
+  fetchDictionary, fetchSchema, fetchVersionInfo, fetchUserAccess, fetchUserAuthMapping,
 } from './actions';
 import ReduxLogin, { fetchLogin } from './Login/ReduxLogin';
 import ProtectedContent from './Login/ProtectedContent';
@@ -47,7 +42,7 @@ import ReduxQueryNode, { submitSearchForm } from './QueryNode/ReduxQueryNode';
 import {
   basename, dev, gaDebug, workspaceUrl, workspaceErrorUrl,
   indexPublic, explorerPublic, enableResourceBrowser, resourceBrowserPublic, enableDAPTracker,
-  discoveryConfig, ddApplicationId, ddClientToken, ddEnv, ddSampleRate,
+  ddApplicationId, ddClientToken, ddEnv, ddSampleRate,
 } from './localconf';
 import { portalVersion } from './versions';
 import { gaTracking, components } from './params';
@@ -56,23 +51,19 @@ import { DAPRouteTracker } from './components/DAPAnalytics';
 import GuppyDataExplorer from './GuppyDataExplorer';
 import isEnabled from './helpers/featureFlags';
 import sessionMonitor from './SessionMonitor';
-import workspaceSessionMonitor from './Workspace/WorkspaceSessionMonitor';
 import Workspace from './Workspace';
 import ResourceBrowser from './ResourceBrowser';
-import Discovery from './Discovery';
-import ReduxWorkspaceShutdownPopup from './Popup/ReduxWorkspaceShutdownPopup';
-import ReduxWorkspaceShutdownBanner from './Popup/ReduxWorkspaceShutdownBanner';
 import ErrorWorkspacePlaceholder from './Workspace/ErrorWorkspacePlaceholder';
 import NotFound from './components/NotFound';
 
 // monitor user's session
 sessionMonitor.start();
-workspaceSessionMonitor.start();
 
 // render the app after the store is configured
 async function init() {
   const store = await getReduxStore();
 
+  // asyncSetInterval(() => store.dispatch(fetchUser), 60000);
   ReactGA.initialize(gaTracking);
   ReactGA.pageview(window.location.pathname + window.location.search);
 
@@ -102,7 +93,6 @@ async function init() {
       // resources can be open to anonymous users, so fetch access:
       store.dispatch(fetchUserAccess),
       store.dispatch(fetchUserAuthMapping),
-      store.dispatch(updateSystemUseNotice(null)),
       // eslint-disable-next-line no-console
       fetchAndSetCsrfToken().catch((err) => { console.log('error on csrf load - should still be ok', err); }),
     ],
@@ -128,8 +118,6 @@ async function init() {
               <ReduxTopBar />
               <ReduxNavBar />
               <div className='main-content'>
-                <ReduxWorkspaceShutdownBanner />
-                <ReduxWorkspaceShutdownPopup />
                 <Switch>
                   {/* process with trailing and duplicate slashes first */}
                   {/* see https://github.com/ReactTraining/react-router/issues/4841#issuecomment-523625186 */}
@@ -393,37 +381,6 @@ async function init() {
                       />
                     )
                     : null}
-                  {isEnabled('discovery')
-                    && (
-                      <Route
-                        exact
-                        path='/discovery'
-                        component={
-                          (props) => (
-                            <ProtectedContent
-                              public={discoveryConfig.public !== false}
-                              component={Discovery}
-                              {...props}
-                            />
-                          )
-                        }
-                      />
-                    )}
-                  {isEnabled('discovery') && (
-                    <Route
-                      exact
-                      path='/discovery/:studyUID'
-                      component={
-                        (props) => (
-                          <ProtectedContent
-                            public
-                            component={Discovery}
-                            {...props}
-                          />
-                        )
-                      }
-                    />
-                  )}
                   <Route
                     path='/not-found'
                     component={NotFound}

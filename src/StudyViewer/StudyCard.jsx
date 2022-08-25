@@ -43,8 +43,6 @@ class StudyCard extends React.Component {
                 fileData={this.props.fileData}
                 studyViewerConfig={this.props.studyViewerConfig}
                 isSingleItemView
-                exportToWorkspaceAction={this.props.exportToWorkspaceAction}
-                exportToWorkspaceEnabled={this.props.exportToWorkspaceEnabled}
               />
             </Panel>
           </Collapse>
@@ -68,15 +66,11 @@ StudyCard.propTypes = {
   fileData: PropTypes.array,
   studyViewerConfig: PropTypes.object,
   initialPanelExpandStatus: PropTypes.bool.isRequired,
-  exportToWorkspaceAction: PropTypes.func,
-  exportToWorkspaceEnabled: PropTypes.bool,
 };
 
 StudyCard.defaultProps = {
   fileData: [],
   studyViewerConfig: {},
-  exportToWorkspaceAction: () => {},
-  exportToWorkspaceEnabled: false,
 };
 
 export default StudyCard;

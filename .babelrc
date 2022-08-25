@@ -13,6 +13,7 @@
   ],
   "plugins": [
     "dev-expression",
+    "transform-class-properties",
     [
       "relay",
       {

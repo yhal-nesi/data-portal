@@ -5,7 +5,6 @@ import {
   Space, Row, Col, Tooltip,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { basename } from '../../localconf';
 import './FooterNIAID.less';
 
 const footerSocialIconLinks = [
@@ -71,13 +70,8 @@ const footerGovLinks = [
     href: 'http://www.usa.gov/',
     text: 'USA.gov',
   },
-  {
-    href: 'https://www.hhs.gov/vulnerability-disclosure-policy/index.html',
-    text: 'HHS Responsible Disclosure Form',
-  },
 ];
 
-const cleanBasename = basename.replace(/(dev.html$)/, '');
 class FooterNIAID extends Component {
   render() {
     return (
@@ -100,7 +94,7 @@ class FooterNIAID extends Component {
                     >
                       <img
                         className='footer__img'
-                        src={(cleanBasename === '/') ? logoObj.src : `${cleanBasename}${logoObj.src}`}
+                        src={logoObj.src}
                         alt={logoObj.alt}
                         style={{ height: logoObj.height ? logoObj.height : 60 }}
                       />

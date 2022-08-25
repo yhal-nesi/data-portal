@@ -18,11 +18,11 @@ class DataDictionary extends React.Component {
   };
 
   handleClickSearchHistoryItem = (keyword) => {
-    this.dictionarySearcherRef.current.launchSearchFromOutside(keyword);
+    this.dictionarySearcherRef.current.getWrappedInstance().launchSearchFromOutside(keyword);
   };
 
   handleClearSearchResult = () => {
-    this.dictionarySearcherRef.current.launchClearSearchFromOutside();
+    this.dictionarySearcherRef.current.getWrappedInstance().launchClearSearchFromOutside();
   };
 
   render() {

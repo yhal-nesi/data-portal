@@ -35,7 +35,6 @@ class ExplorerVisualization extends React.Component {
       value: this.props.totalCount,
     });
     Object.keys(chartConfig).forEach((field) => {
-      // use `${field}` to handle nested fields, which contain '.'
       if (!aggsData || !aggsData[`${field}`] || !aggsData[`${field}`].histogram) return;
       const { histogram } = aggsData[`${field}`];
       switch (chartConfig[`${field}`].chartType) {
@@ -145,7 +144,6 @@ class ExplorerVisualization extends React.Component {
             downloadRawDataByTypeAndFilter={this.props.downloadRawDataByTypeAndFilter}
             filter={this.props.filter}
             history={this.props.history}
-            location={this.props.location}
             isLocked={isComponentLocked}
             isPending={this.props.aggsDataIsLoading}
           />
@@ -239,7 +237,6 @@ class ExplorerVisualization extends React.Component {
                 fields: tableColumns,
                 ordered: tableColumnsOrdered,
                 linkFields: this.props.tableConfig.linkFields || [],
-                dicomViewerId: this.props.tableConfig.dicomViewerId,
                 applyFields: this.props.tableConfig.applyFields || [],
                 studyProjectFields: this.props.tableConfig.studyProjectFields || [],
               }}
@@ -278,7 +275,6 @@ ExplorerVisualization.propTypes = {
   guppyConfig: GuppyConfigType,
   nodeCountTitle: PropTypes.string,
   tierAccessLimit: PropTypes.number.isRequired,
-  location: PropTypes.object.isRequired,
 };
 
 ExplorerVisualization.defaultProps = {

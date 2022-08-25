@@ -16,12 +16,8 @@ module.exports = {
     es6: true,
     jest: true,
   },
-  globals: {
-    JSX: true,
-  },
   plugins: [
     'react',
-    'react-hooks',
     'jsx-a11y',
     'import',
   ],
@@ -78,7 +74,7 @@ module.exports = {
     ],
     'jsx-a11y/label-has-associated-control': [2, {
       labelAttributes: ['label'],
-      controlComponents: ['Switch', 'Input'],
+      controlComponents: ['Switch'],
       depth: 3,
     }],
     'jsx-a11y/anchor-is-valid': ['off'],
@@ -96,8 +92,6 @@ module.exports = {
     'react/destructuring-assignment': ['off'],
     'react/jsx-one-expression-per-line': ['off'],
     'react/jsx-props-no-spreading': ['off'],
-    'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
-    'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
   },
   overrides: [
     {

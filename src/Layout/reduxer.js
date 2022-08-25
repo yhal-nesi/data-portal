@@ -34,7 +34,6 @@ export const ReduxTopBar = (() => {
     user: state.user,
     userAuthMapping: state.userAuthMapping,
     isFullWidth: isPageFullScreen(state.bar.active),
-    discovery: state.discovery,
   });
 
   // Bar chart does not dispatch anything

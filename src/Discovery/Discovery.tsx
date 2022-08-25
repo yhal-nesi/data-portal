@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import * as JsSearch from 'js-search';
-import {
-  Tag, Popover, Space, Collapse, Button, Dropdown, Menu, Pagination, Tooltip,
-} from 'antd';
-import {
-  UnlockOutlined, ClockCircleOutlined, DashOutlined, UpOutlined, DownOutlined, UndoOutlined, FilterFilled, FilterOutlined, MinusOutlined,
-} from '@ant-design/icons';
-import Checkbox from 'antd/lib/checkbox/Checkbox';
-import MenuItem from 'antd/lib/menu/MenuItem';
+import { Tag, Popover } from 'antd';
+import { LockFilled, UnlockOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { DiscoveryConfig } from './DiscoveryConfig';
 import './Discovery.css';
 import DiscoverySummary from './DiscoverySummary';
 import DiscoveryTagViewer from './DiscoveryTagViewer';
-import DiscoveryDropdownTagViewer from './DiscoveryDropdownTagViewer';
 import DiscoveryListView from './DiscoveryListView';
 import DiscoveryDetails from './DiscoveryDetails';
 import DiscoveryAdvancedSearchPanel from './DiscoveryAdvancedSearchPanel';
@@ -23,17 +16,11 @@ import DiscoveryAccessibilityLinks from './DiscoveryAccessibilityLinks';
 export const accessibleFieldName = '__accessible';
 
 export enum AccessLevel {
-  ACCESSIBLE = 1,
-  UNACCESSIBLE = 2,
-  PENDING = 3,
-  NOT_AVAILABLE = 4,
+  ACCESSIBLE,
+  UNACCESSIBLE,
+  NOT_AVAILABLE,
+  PENDING
 }
-
-export enum AccessSortDirection {
-  ASCENDING='sort ascending', DESCENDING='sort descending', NONE='cancel sorting'
-}
-
-const { Panel } = Collapse;
 
 const ARBORIST_READ_PRIV = 'read';
 
@@ -69,17 +56,11 @@ const accessibleDataFilterToggle = () => {
   }
 };
 
-export const renderFieldContent = (content: any, contentType: 'string'|'paragraphs'|'number'|'link'|'button'|'tags' = 'string', config: DiscoveryConfig): React.ReactNode => {
+export const renderFieldContent = (content: any, contentType: 'string'|'paragraphs'|'number'|'link'|'tags' = 'string', config: DiscoveryConfig): React.ReactNode => {
   switch (contentType) {
   case 'string':
-    if (Array.isArray(content)) {
-      return content.join(', ');
-    }
     return content;
   case 'number':
-    if (Array.isArray(content)) {
-      return content.join(', ');
-    }
     return content.toLocaleString();
   case 'paragraphs':
     return content.split('\n').map((paragraph, i) => <p key={i}>{paragraph}</p>);
@@ -89,25 +70,10 @@ export const renderFieldContent = (content: any, contentType: 'string'|'paragrap
         onClick={(ev) => ev.stopPropagation()}
         onKeyPress={(ev) => ev.stopPropagation()}
         href={content}
-        target='_blank'
-        rel='noreferrer'
       >
         {content}
       </a>
     );
-  case 'button':
-    return (
-      <div>
-          <div key={content}>
-            <a href={content} target="_blank">
-            <button
-              className='button-primary-orange'
-            >Apply for access</button>
-            </a>
-          </div>
-      </div>
-    );
- 
   case 'tags':
     if (!content || !content.map) {
       return null;
@@ -204,98 +170,41 @@ const filterByAdvSearch = (studies: any[], advSearchFilterState: FilterState, co
   }));
 };
 
-export interface DiscoveryResource {
-  [accessibleFieldName]: AccessLevel,
-  [any: string]: any,
-  tags?: { name: string, category: string }[]
-}
-
 interface Props {
   config: DiscoveryConfig
-  studies: DiscoveryResource[]
+  studies: {__accessible: boolean, [any: string]: any}[]
   params?: {studyUID: string} // from React Router
-  selectedResources,
-  pagination: { currentPage: number, resultsPerPage: number },
-  selectedTags,
-  searchTerm: string,
-  accessFilters: {
-    [accessLevel: number]: boolean
-  },
-  accessSortDirection: AccessSortDirection,
-  onSearchChange: (arg0: string) => any,
-  onTagsSelected: (arg0: any) => any,
-  onAccessFilterSet: (arg0: object) => any,
-  onAccessSortDirectionSet: (accessSortDirection: AccessSortDirection) => any,
-  onResourcesSelected: (resources: DiscoveryResource[]) => any,
-  onPaginationSet: (pagination: {currentPage: number, resultsPerPage: number}) => any,
 }
 
 const Discovery: React.FunctionComponent<Props> = (props: Props) => {
   const { config } = props;
 
   const [jsSearch, setJsSearch] = useState(null);
-  const [accessibilityFilterVisible, setAccessibilityFilterVisible] = useState(false);
+  const [searchFilteredResources, setSearchFilteredResources] = useState([]);
+  const [selectedResources, setSelectedResources] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [filtersVisible, setFiltersVisible] = useState(false);
   const [filterState, setFilterState] = useState({} as FilterState);
   const [modalData, setModalData] = useState({});
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedTags, setSelectedTags] = useState({});
   const [permalinkCopied, setPermalinkCopied] = useState(false);
   const [exportingToWorkspace, setExportingToWorkspace] = useState(false);
   const [advSearchFilterHeight, setAdvSearchFilterHeight] = useState('100vh');
-  const [searchableTagCollapsed, setSearchableTagCollapsed] = useState(
-    config.features.search.tagSearchDropdown
-    && config.features.search.tagSearchDropdown.enabled
-    && (config.features.search.tagSearchDropdown.collapseOnDefault
-      || config.features.search.tagSearchDropdown.collapseOnDefault === undefined),
-  );
-  const [visibleResources, setVisibleResources] = useState([]);
 
   const handleSearchChange = (ev) => {
     const { value } = ev.currentTarget;
-    props.onSearchChange(value);
+    setSearchTerm(value);
+    if (value === '') {
+      setSearchFilteredResources(props.studies);
+      return;
+    }
+    if (!jsSearch) {
+      return;
+    }
+    const results = jsSearch.search(value);
+    setSearchFilteredResources(results);
   };
-
-  const doSearchFilterSort = () => {
-    let filteredResources = props.studies;
-    if (jsSearch && props.searchTerm) {
-      filteredResources = jsSearch.search(props.searchTerm);
-    }
-    filteredResources = filterByTags(
-      filteredResources,
-      props.selectedTags,
-      config,
-    );
-
-    if (config.features.advSearchFilters && config.features.advSearchFilters.enabled) {
-      filteredResources = filterByAdvSearch(
-        filteredResources,
-        filterState,
-        config,
-      );
-    }
-
-    if (props.config.features.authorization.enabled) {
-      filteredResources = filteredResources.filter(
-        (resource) => props.accessFilters[resource[accessibleFieldName]],
-      );
-    }
-
-    filteredResources = filteredResources.sort(
-      (a, b) => {
-        if (props.accessSortDirection === AccessSortDirection.DESCENDING) {
-          return a[accessibleFieldName] - b[accessibleFieldName];
-        } if (props.accessSortDirection === AccessSortDirection.ASCENDING) {
-          return b[accessibleFieldName] - a[accessibleFieldName];
-        }
-        return 0;
-      },
-    );
-    setVisibleResources(filteredResources);
-  };
-
-  useEffect(doSearchFilterSort,
-    [props.searchTerm, props.accessSortDirection, props.studies, props.pagination, props.accessFilters, props.selectedTags],
-  );
 
   useEffect(() => {
     // Load studies into JS Search.
@@ -328,15 +237,16 @@ const Discovery: React.FunctionComponent<Props> = (props: Props) => {
     search.addDocuments(props.studies);
     // expose the search function
     setJsSearch(search);
+    // -----------------------
+    setSearchFilteredResources(props.studies);
   }, [props.studies]);
 
   useEffect(() => {
     // If opening to a study by default, open that study
-    if (props.params.studyUID && props.studies.length > 0) {
-      const studyID = decodeURIComponent(props.params.studyUID);
+    if (props.params.studyUID) {
+      const studyID = props.params.studyUID;
       const defaultModalData = props.studies.find(
         (r) => r[config.minimalFieldMapping.uid] === studyID);
-
       if (defaultModalData) {
         setPermalinkCopied(false);
         setModalData(defaultModalData);
@@ -358,7 +268,7 @@ const Discovery: React.FunctionComponent<Props> = (props: Props) => {
 
   // Set up table columns
   // -----
-  const columns = config.studyColumns.map((column) => ({
+  const columns: any = config.studyColumns.map((column) => ({
     title: <div className='discovery-table-header'>{column.name}</div>,
     ellipsis: !!column.ellipsis,
     textWrap: 'word-break',
@@ -380,11 +290,11 @@ const Discovery: React.FunctionComponent<Props> = (props: Props) => {
         : !column.contentType || column.contentType === 'string';
       if (columnIsSearchable) {
         // Show search highlights if there's an active search term
-        if (props.searchTerm) {
+        if (searchTerm) {
           if (Array.isArray(value)) {
             value = value.join(', ');
           }
-          return highlightSearchTerm(value, props.searchTerm).highlighted;
+          return highlightSearchTerm(value, searchTerm).highlighted;
         }
       }
       if (column.hrefValueFromField) {
@@ -398,13 +308,13 @@ const Discovery: React.FunctionComponent<Props> = (props: Props) => {
   columns.push(
     {
       textWrap: 'word-break',
-      title: <div className='discovery-table-header'> { config.tagsDisplayName || 'Tags' }</div>,
+      title: <div className='discovery-table-header'>Tags</div>,
       ellipsis: false,
       width: config.tagColumnWidth || '200px',
       render: (_, record) => (
         <React.Fragment>
           {record.tags.map(({ name, category }) => {
-            const isSelected = !!props.selectedTags[name];
+            const isSelected = !!selectedTags[name];
             const color = getTagColor(category, config);
             if (typeof name !== 'string') {
               return null;
@@ -423,19 +333,17 @@ const Discovery: React.FunctionComponent<Props> = (props: Props) => {
                 }}
                 onKeyPress={(ev) => {
                   ev.stopPropagation();
-                  const selectedTags = {
-                    ...props.selectedTags,
-                    [name]: props.selectedTags[name] ? undefined : true,
-                  };
-                  props.onTagsSelected(selectedTags);
+                  setSelectedTags({
+                    ...selectedTags,
+                    [name]: selectedTags[name] ? undefined : true,
+                  });
                 }}
                 onClick={(ev) => {
                   ev.stopPropagation();
-                  const selectedTags = {
-                    ...props.selectedTags,
-                    [name]: props.selectedTags[name] ? undefined : true,
-                  };
-                  props.onTagsSelected(selectedTags);
+                  setSelectedTags({
+                    ...selectedTags,
+                    [name]: selectedTags[name] ? undefined : true,
+                  });
                 }}
               >
                 {name}
@@ -448,107 +356,27 @@ const Discovery: React.FunctionComponent<Props> = (props: Props) => {
   );
   if (config.features.authorization.enabled) {
     columns.push({
-      title: (
-        <div className='discovery-table-header'>
-          <Space size={'small'}>
-            <div>Data Availability</div>
-            <Tooltip title={'Filter by data access'}>
-              <Dropdown
-                visible={accessibilityFilterVisible}
-                overlay={(
-                  <Menu>
-                    {
-                      [
-                        [AccessLevel.ACCESSIBLE, 'Available', <UnlockOutlined />],
-                        [AccessLevel.NOT_AVAILABLE, 'Not Available', <DashOutlined />],
-                        [AccessLevel.PENDING, 'Pending', <ClockCircleOutlined />],
-                      ].map(
-                        ([accessLevel, accessDescriptor, icon]: any[]) => (
-                          <MenuItem key={accessLevel.toString()}>
-                            <Checkbox
-                              checked={props.accessFilters[accessLevel]}
-                              onChange={
-                                () => {
-                                  props.onAccessFilterSet({
-                                    ...props.accessFilters,
-                                    [accessLevel]: !props.accessFilters[accessLevel],
-                                  });
-                                }
-                              }
-                            >
-                              {icon}&nbsp;{accessDescriptor}
-                            </Checkbox>
-                          </MenuItem>
-                        ),
-                      )
-                    }
-                    <Menu.Divider />
-                    <MenuItem key={'access-filter-buttons'}>
-                      <Space size={'large'}>
-                        <Button type={'default'} onClick={() => setAccessibilityFilterVisible(false)}>
-                        OK
-                        </Button>
-                        <Button
-                          type={'primary'}
-                          onClick={() => props.onAccessFilterSet({
-                            [AccessLevel.ACCESSIBLE]: true,
-                            [AccessLevel.NOT_AVAILABLE]: true,
-                            [AccessLevel.PENDING]: true,
-                            [AccessLevel.UNACCESSIBLE]: true,
-                          },
-                          )}
-                        > Reset
-                        </Button>
-                      </Space>
-                    </MenuItem>
-                  </Menu>
-                )}
-              >
-                <Button
-                  size={'large'}
-                  type={'text'}
-                  icon={
-                    Object.values(props.accessFilters).every(Boolean)
-                      ? <FilterOutlined />
-                      : <FilterFilled color={'blue'} />
-                  }
-                  onClick={() => { setAccessibilityFilterVisible(!accessibilityFilterVisible); }}
-                />
-              </Dropdown>
-            </Tooltip>
-            {
-              (() => {
-                let nextSortDirection = AccessSortDirection.DESCENDING;
-                if (props.accessSortDirection === AccessSortDirection.DESCENDING) {
-                  nextSortDirection = AccessSortDirection.ASCENDING;
-                } else if (props.accessSortDirection === AccessSortDirection.ASCENDING) {
-                  nextSortDirection = AccessSortDirection.NONE;
-                }
-                return (
-                  <Tooltip title={`Click to ${nextSortDirection}`}>
-                    <Button
-                      type={'text'}
-                      onClick={() => props.onAccessSortDirectionSet(nextSortDirection)}
-                      icon={
-                        (() => {
-                          if (props.accessSortDirection === AccessSortDirection.DESCENDING) {
-                            return <DownOutlined />;
-                          } if (props.accessSortDirection === AccessSortDirection.ASCENDING) {
-                            return <UpOutlined />;
-                          }
-                          return <MinusOutlined />;
-                        })()
-                      }
-                    />
-                  </Tooltip>
-                );
-              })()
-            }
-          </Space>
-        </div>),
-      sortOrder: 'descend',
+      title: <div className='discovery-table-header'>Data Access</div>,
+      filters: [{
+        text: <React.Fragment><UnlockOutlined />&nbsp;Accessible</React.Fragment>,
+        value: AccessLevel.ACCESSIBLE,
+        id: 'accessible-data-filter',
+      }, {
+        text: <React.Fragment><LockFilled />&nbsp;Unaccessible</React.Fragment>,
+        value: AccessLevel.UNACCESSIBLE,
+        id: 'unaccessible-data-filter',
+      }, {
+        text: <React.Fragment><span style={{ color: 'gray' }}>n/a</span>&nbsp;No Data</React.Fragment>,
+        value: AccessLevel.NOT_AVAILABLE,
+        id: 'not-available-data-filter',
+      }, {
+        text: <React.Fragment><ClockCircleOutlined />&nbsp;Pending</React.Fragment>,
+        value: AccessLevel.PENDING,
+        id: 'pending-data-filter',
+      }],
+      onFilter: (value, record) => record[accessibleFieldName] === value,
       ellipsis: false,
-      width: '200px',
+      width: '106px',
       textWrap: 'word-break',
       render: (_, record) => {
         if (record[accessibleFieldName] === AccessLevel.PENDING) {
@@ -579,7 +407,7 @@ const Discovery: React.FunctionComponent<Props> = (props: Props) => {
                 </div>
               )}
             >
-              <DashOutlined className='discovery-table__access-icon' />
+              <span style={{ color: 'gray' }}>n/a</span>
             </Popover>
           );
         }
@@ -601,41 +429,37 @@ const Discovery: React.FunctionComponent<Props> = (props: Props) => {
             </Popover>
           );
         }
-        return <React.Fragment />;
-        /* Hiding the closed lock for the HEAL project.
-          This may be useful functionality for other commons.
-          Keeping the logic for now.
-           https://ctds-planx.atlassian.net/browse/HP-393
-        */
-        // return (
-        //   <Popover
-        //     overlayClassName='discovery-popover'
-        //     placement='topRight'
-        //     arrowPointAtCenter
-        //     title={'You do not have access to this study.'}
-        //     content={(
-        //       <div className='discovery-popover__text'>
-        //         <React.Fragment>You don&apos;t have <code>{ARBORIST_READ_PRIV}</code> access to</React.Fragment>
-        //         <React.Fragment><code>{record[config.minimalFieldMapping.authzField]}</code>.</React.Fragment>
-        //       </div>
-        //     )}
-        //   >
-        //     {/* <EyeInvisibleOutlined className='discovery-table__access-icon' /> */}
-        //     ---
-        //   </Popover>
-        // );
+        return (
+          <Popover
+            overlayClassName='discovery-popover'
+            placement='topRight'
+            arrowPointAtCenter
+            title={'You do not have access to this study.'}
+            content={(
+              <div className='discovery-popover__text'>
+                <React.Fragment>You don&apos;t have <code>{ARBORIST_READ_PRIV}</code> access to</React.Fragment>
+                <React.Fragment><code>{record[config.minimalFieldMapping.authzField]}</code>.</React.Fragment>
+              </div>
+            )}
+          >
+            <LockFilled className='discovery-table__access-icon' />
+          </Popover>
+        );
       },
     });
   }
   // -----
 
-  const enableSearchBar = props.config.features.search
-  && props.config.features.search.searchBar
-  && props.config.features.search.searchBar.enabled;
-
-  const enableSearchableTags = props.config.features.search
-  && props.config.features.search.tagSearchDropdown
-  && props.config.features.search.tagSearchDropdown.enabled;
+  let visibleResources = filterByTags(
+    searchFilteredResources,
+    selectedTags,
+    config,
+  );
+  visibleResources = filterByAdvSearch(
+    visibleResources,
+    filterState,
+    config,
+  );
 
   // Disabling noninteractive-tabindex rule because the span tooltip must be focusable as per https://www.w3.org/TR/2017/REC-wai-aria-1.1-20171214/#tooltip
   /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -652,74 +476,24 @@ const Discovery: React.FunctionComponent<Props> = (props: Props) => {
           visibleResources={visibleResources}
           config={config}
         />
-        {(enableSearchableTags) ? (
-          <div className='discovery-header__dropdown-tags-container' id='discovery-tag-filters'>
-            <Space direction='vertical' style={{ width: '100%' }}>
-              <div className='discovery-header__dropdown-tags-control-panel'>
-                {(enableSearchBar)
-                && (
-                  <div className='discovery-search-container discovery-header__dropdown-tags-search'>
-                    <DiscoveryMDSSearch
-                      searchTerm={props.searchTerm}
-                      handleSearchChange={handleSearchChange}
-                      inputSubtitle={config.features.search.searchBar.inputSubtitle}
-                    />
-                  </div>
-                )}
-                <div className='discovery-header__dropdown-tags-buttons'>
-                  <Button
-                    type='default'
-                    className={'discovery-header__dropdown-tags-control-button'}
-                    disabled={Object.keys(props.selectedTags).length === 0}
-                    onClick={() => { props.onTagsSelected({}); }}
-                    icon={<UndoOutlined />}
-                  >
-                    {'Reset Selection'}
-                  </Button>
-                  <Button
-                    type='default'
-                    className={'discovery-header__dropdown-tags-control-button'}
-                    onClick={() => { setSearchableTagCollapsed(!searchableTagCollapsed); }}
-                    icon={(searchableTagCollapsed) ? <DownOutlined /> : <UpOutlined />}
-                  >
-                    {`${props.config.features.search.tagSearchDropdown.collapsibleButtonText || 'Tag Panel'}`}
-                  </Button>
-                </div>
-              </div>
-              <Collapse activeKey={(searchableTagCollapsed) ? '' : '1'} ghost>
-                <Panel className='discovery-header__dropdown-tags-display-panel' header='' key='1'>
-                  <div className='discovery-header__dropdown-tags'>
-                    <DiscoveryDropdownTagViewer
-                      config={config}
-                      studies={props.studies}
-                      selectedTags={props.selectedTags}
-                      setSelectedTags={props.onTagsSelected}
-                    />
-                  </div>
-                </Panel>
-              </Collapse>
-            </Space>
-          </div>
-        ) : (
-          <DiscoveryTagViewer
-            config={config}
-            studies={props.studies}
-            selectedTags={props.selectedTags}
-            setSelectedTags={props.onTagsSelected}
-          />
-        )}
+        <DiscoveryTagViewer
+          config={config}
+          studies={props.studies}
+          selectedTags={selectedTags}
+          setSelectedTags={setSelectedTags}
+        />
       </div>
 
       <div className='discovery-studies-container'>
         {/* Free-form text search box */}
-        { (enableSearchBar && !enableSearchableTags
-        )
+        { (props.config.features.search
+        && props.config.features.search.searchBar
+        && props.config.features.search.searchBar.enabled)
             && (
-              <div className='discovery-search-container discovery-search-container__standalone'>
+              <div className='discovery-search-container'>
                 <DiscoveryMDSSearch
-                  searchTerm={props.searchTerm}
+                  searchTerm={searchTerm}
                   handleSearchChange={handleSearchChange}
-                  inputSubtitle={config.features.search.searchBar.inputSubtitle}
                 />
               </div>
             )}
@@ -727,6 +501,7 @@ const Discovery: React.FunctionComponent<Props> = (props: Props) => {
         {/* Bar with actions, stats, around advanced search and data actions */}
         <ReduxDiscoveryActionBar
           config={props.config}
+          selectedResources={selectedResources}
           exportingToWorkspace={exportingToWorkspace}
           setExportingToWorkspace={setExportingToWorkspace}
           filtersVisible={filtersVisible}
@@ -756,37 +531,21 @@ const Discovery: React.FunctionComponent<Props> = (props: Props) => {
         )}
 
         <div id='discovery-table-of-records' className={`discovery-table-container ${filtersVisible ? 'discovery-table-container--collapsed' : ''}`}>
-          <Space direction={'vertical'} style={{ width: '100%' }}>
-            <DiscoveryListView
-              config={config}
-              studies={props.studies}
-              visibleResources={
-                visibleResources.slice(
-                  (props.pagination.currentPage - 1) * props.pagination.resultsPerPage,
-                  props.pagination.currentPage * props.pagination.resultsPerPage,
-                )
-              }
-              searchTerm={props.searchTerm}
-              advSearchFilterHeight={advSearchFilterHeight}
-              setAdvSearchFilterHeight={setAdvSearchFilterHeight}
-              setPermalinkCopied={setPermalinkCopied}
-              setModalData={setModalData}
-              setModalVisible={setModalVisible}
-              columns={columns}
-              accessibleFieldName={accessibleFieldName}
-              selectedResources={props.selectedResources}
-              onResourcesSelected={props.onResourcesSelected}
-            />
-            <Pagination
-              current={props.pagination.currentPage}
-              pageSize={props.pagination.resultsPerPage}
-              onChange={(currentPage, resultsPerPage) => props.onPaginationSet({ currentPage, resultsPerPage })}
-              pageSizeOptions={['10', '20', '50', '100']}
-              total={visibleResources.length}
-              showSizeChanger
-              style={{ float: 'right' }}
-            />
-          </Space>
+          <DiscoveryListView
+            config={config}
+            studies={props.studies}
+            visibleResources={visibleResources}
+            searchTerm={searchTerm}
+            advSearchFilterHeight={advSearchFilterHeight}
+            setAdvSearchFilterHeight={setAdvSearchFilterHeight}
+            setPermalinkCopied={setPermalinkCopied}
+            setModalData={setModalData}
+            setModalVisible={setModalVisible}
+            columns={columns}
+            accessibleFieldName={accessibleFieldName}
+            selectedResources={selectedResources}
+            setSelectedResources={setSelectedResources}
+          />
         </div>
 
         <DiscoveryDetails

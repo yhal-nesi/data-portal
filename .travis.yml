@@ -8,16 +8,18 @@ node_js:
   - "14"
 
 cache:
-  npm: false # disable npm cache for npm ci
+  directories:
+    - node_modules # NPM packages
 
 services:
     - docker
 
 before_install:
-    - npm install -g npm@8.5
+    - npm install -g npm@7
+    - npm config set maxsockets 5
 
 install:
-    - npm ci
+    - npm install --force --legacy-peer-deps
 
 script:
     - npm run relay

@@ -89,16 +89,11 @@
   font-size: 40px;
   font-size: 14px;
   line-height: 50px;
-  text-transform: none;
+  text-transform: uppercase;
 }
 
 .discovery-header__tags-container {
   flex: 1 1 auto;
-  height: 90%;
-}
-
-.discovery-header__dropdown-tags-container {
-  flex: 3 1 60%;
   height: 90%;
 }
 
@@ -107,7 +102,7 @@
   cursor: default;
   font-weight: normal;
   font-size: 1.125rem;
-  text-transform: none;
+  text-transform: uppercase;
   color: #555;
 }
 
@@ -147,7 +142,7 @@
 .discovery-tag {
   cursor: pointer;
   line-height: 18px;
-  font-size: 12px;
+  font-size: 10px;
   box-sizing: border-box;
   border-radius: 5px;
   border-width: 2px;
@@ -188,7 +183,7 @@
   overflow-y: auto;
 }
 
-.discovery-search-container__standalone {
+.discovery-search-container {
   margin-bottom: 10px;
 }
 
@@ -196,16 +191,7 @@
   border-color: var(--g3-color__base-blue);
   border-width: 1px;
   border-radius: 7px;
-  max-width: 800px;
-}
-
-.discovery-input-subtitle {
-  font-size: 0.75em;
-  color: var(--g3-color__titanium);
-}
-
-#discovery-table-of-records {
-  overflow: visible;
+  max-width: 500px;
 }
 
 .discovery-table-container {
@@ -224,7 +210,7 @@
 
 .discovery-table-header {
   font-size: 14px;
-  text-transform: none;
+  text-transform: uppercase;
   font-weight: 700;
 }
 
@@ -232,10 +218,6 @@
   cursor: pointer;
   overflow: visible;
   position: relative;
-}
-
-.discovery-table-container .ant-table-column-sorter {
-  display: none;
 }
 
 /* HACK: Because the study description row is a separate row under the hood,
@@ -280,7 +262,6 @@
 }
 
 .discovery-table-container .ant-table-tbody > tr.discovery-table__row--hover > td {
-  cursor: pointer;
   border-bottom: 0;
   background: #fff;
   /* transition: background-color 0.3s, border-color 0.3s; */
@@ -349,41 +330,6 @@
   border-color: unset;
 }
 
-.discovery-header__dropdown-tags-control-button {
-  color: var(--g3-color__base-blue);
-  border-color: var(--g3-color__base-blue);
-  min-width: 150px;
-  margin-left: 8px;
-  height: 40px;
-  border-width: 1px;
-  border-radius: 7px;
-}
-
-.discovery-header__dropdown-tags-control-panel {
-  width: 100%;
-  padding-right: 16px;
-  padding-left: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-
-/* hide the dropdown arrow from the panel, this is intended */
-/* stylelint-disable declaration-no-important */
-.discovery-header__dropdown-tags-display-panel .ant-collapse-header {
-  display: none!important;
-}
-/* stylelint-enable declaration-no-important */
-
-.discovery-header__dropdown-tags-search {
-  width: 50%;
-}
-
-.discovery-header__dropdown-tags .ant-select-show-search.ant-select:not(.ant-select-customize-input) .ant-select-selector {
-  border-width: 1px;
-  border-radius: 7px;
-}
-
 .discovery-modal {
   box-sizing: border-box;
 }
@@ -394,7 +340,7 @@
 
 .discovery-modal__close-button {
   color: var(--g3-color__base-blue);
-  text-transform: none;
+  text-transform: uppercase;
   font-weight: 700;
 }
 
@@ -437,7 +383,7 @@
 .discovery-modal__attribute-name {
   margin-right: 7px;
   padding: 4px;
-  text-transform: none;
+  text-transform: uppercase;
   font-weight: bold;
 }
 
@@ -461,18 +407,11 @@
   font-size: 12px;
   background-color: #dfe3e2;
   border-radius: 4px;
-  min-width: 370px;
 }
 
 .discovery-modal__attribute-value {
   text-align: left;
   padding: 4px;
-  overflow: hidden;
-  white-space: pre-wrap; /* CSS3 */
-  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
-  white-space: -pre-wrap; /* Opera 4-6 */
-  white-space: -o-pre-wrap; /* Opera 7 */
-  word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 
 .discovery-modal__attribute-value--multiline {
@@ -491,7 +430,7 @@
 }
 
 .discovery-modal__download-panel-header {
-  text-transform: none;
+  text-transform: uppercase;
   font-weight: bold;
   font-size: 12px;
   background: #dfe3e2;
@@ -517,35 +456,4 @@
   text-transform: none;
   color: #313839;
   font-weight: normal;
-}
-
-.discovery-modal__field {
-  display: flex;
-  justify-content: space-between;
-  padding: 2px 0px;
-}
-
-.discovery-modal__fieldlabel {
-  padding-right: 10px;
-}
-
-.discovery-modal__subheading {
-  background-color: #dfe3e2;
-  border-radius: 4px;
-  padding: 0px 10px;
-}
-
-.discovery-modal__fieldgroup {
-  padding: 4px;
-}
-
-.discovery-modal__tagsfield {
-  display: flex;
-  justify-content: end;
-  flex-wrap: wrap;
-
-}
-
-.ant-tabs-tab-active > .ant-tabs-tab-btn > .discovery-modal__tablabel {
-  color: var(--g3-color__base-blue);
 }

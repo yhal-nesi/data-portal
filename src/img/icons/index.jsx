@@ -1,7 +1,6 @@
 import React from 'react';
 import IcoAnalysis from './analysis.svg';
 import IcoBack from './back.svg';
-import IcoBarChart from './bar-chart.svg';
 import IcoCohortTools from './cohort-tools.svg';
 import IcoCopy from './copy.svg';
 import IcoCheckbox from './check.svg';
@@ -73,9 +72,6 @@ const dictIcons = {
   ),
   cross: (height, customedStyles) => (
     <IcoCross height={height} style={{ ...customedStyles }} />
-  ),
-  'bar-chart': (height, customedStyles) => (
-    <IcoBarChart height={height} style={{ ...customedStyles }} />
   ),
   'cross-key': (height, customedStyles) => (
     <IcoCrossKey height={height} style={{ ...customedStyles }} />

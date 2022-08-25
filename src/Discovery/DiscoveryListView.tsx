@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Table, Empty } from 'antd';
 import './Discovery.css';
 import { DiscoveryConfig } from './DiscoveryConfig';
-import { AccessLevel, DiscoveryResource } from './Discovery';
+import { AccessLevel } from './Discovery';
 
 interface Props {
   config: DiscoveryConfig;
-  studies: DiscoveryResource[];
+  studies: {__accessible: boolean, [any: string]: any}[];
   columns: [];
   visibleResources: any[];
   accessibleFieldName: string;
@@ -15,9 +15,9 @@ interface Props {
   setModalVisible: (boolean) => void;
   setModalData: (boolean) => void;
   selectedResources: any[];
+  setSelectedResources: (any) => void;
   advSearchFilterHeight: string | number;
   setAdvSearchFilterHeight: (any) => void;
-  onResourcesSelected: (selectedResources: DiscoveryResource[]) => any
 }
 
 const DiscoveryListView: React.FunctionComponent<Props> = (props: Props) => {
@@ -31,15 +31,11 @@ const DiscoveryListView: React.FunctionComponent<Props> = (props: Props) => {
       props.setAdvSearchFilterHeight(document.getElementById('discovery-table-of-records').offsetHeight);
     }
   });
-  const scroll = (
-    props.config.tableScrollHeight
-      ? { scroll: { y: props.config.tableScrollHeight } } : {}
-  );
+
   return (
     <Table
-      {...scroll}
-      pagination={false} // handled in separate element
       loading={props.studies.length === 0}
+      width={'500px'}
       locale={{
         emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='No Studies' />,
       }}
@@ -58,7 +54,7 @@ const DiscoveryListView: React.FunctionComponent<Props> = (props: Props) => {
         ),
         preserveSelectedRowKeys: true,
         onChange: (_, selectedRows) => {
-          props.onResourcesSelected(selectedRows);
+          props.setSelectedResources(selectedRows);
         },
         getCheckboxProps: (record) => {
           let disabled;

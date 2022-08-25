@@ -7,7 +7,6 @@ import {
 const mapStateToProps = (state) => ({
   job: state.analysis.job,
   userAccess: state.userAccess.access,
-  user: state.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -16,6 +15,5 @@ const mapDispatchToProps = (dispatch) => ({
   fetchJobResult: (jobId) => dispatch(fetchJobResult(jobId)),
   resetJobState: () => dispatch(resetJobState()),
 });
-
 const ReduxExplorerButtonGroup = connect(mapStateToProps, mapDispatchToProps)(ExplorerButtonGroup);
 export default ReduxExplorerButtonGroup;

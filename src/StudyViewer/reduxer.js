@@ -3,13 +3,9 @@ import _ from 'lodash';
 import { withRouter } from 'react-router-dom';
 import StudyDetails from './StudyDetails';
 import StudyViewer from './StudyViewer';
-import ExportToWorkspace from './ExportToWorkspace';
 import SingleStudyViewer from './SingleStudyViewer';
 import { guppyGraphQLUrl, studyViewerConfig, requestorPath } from '../localconf';
 import { fetchWithCreds } from '../actions';
-import {
-  dispatchJob, checkJob, fetchJobResult, resetJobState,
-} from '../Analysis/AnalysisJob';
 
 const generateGQLQuery = (nameOfIndex, fieldsToFetch, rowAccessorField, rowAccessorValue) => {
   const query = `query ($filter: JSON) {
@@ -109,23 +105,8 @@ const fetchRequestedAccess = (receivedData) => {
     method: 'POST',
     body: JSON.stringify(body),
   }).then(
-    ({ status, data }) => {
-      switch (status) {
-      case 200:
-        return data;
-      default:
-        console.error('Unable to get requested access:', status, data);
-        return {};
-      }
-    },
+    ({ data }) => data,
   );
-};
-
-const removeEmptyFields = (inputObj, flag) => {
-  if (flag) {
-    return _.omitBy(inputObj, _.isNil);
-  }
-  return inputObj;
 };
 
 const processDataset = (nameOfIndex, receivedData, itemConfig, displayButtonsFields) => {
@@ -140,7 +121,7 @@ const processDataset = (nameOfIndex, receivedData, itemConfig, displayButtonsFie
           processedItem.rowAccessorValue = dataElement[targetStudyViewerConfig.rowAccessor];
           processedItem.blockData = _.pick(dataElement, itemConfig.blockFields);
           processedItem.applicationData = _.pick(dataElement, itemConfig.applicationFields);
-          processedItem.tableData = removeEmptyFields(_.pick(dataElement, itemConfig.tableFields), itemConfig.hideEmptyFields);
+          processedItem.tableData = _.pick(dataElement, itemConfig.tableFields);
           processedItem.displayButtonsData = _.pick(dataElement, displayButtonsFields);
           processedItem.accessibleValidationValue = dataElement.auth_resource_path;
           processedItem.accessRequested = !!(requestedAccess
@@ -253,7 +234,6 @@ export const ReduxStudyDetails = (() => {
   const mapStateToProps = (state) => ({
     user: state.user,
     userAuthMapping: state.userAuthMapping,
-    userAccess: state.userAccess.access,
   });
 
   return withRouter(connect(mapStateToProps)(StudyDetails));
@@ -279,18 +259,4 @@ export const ReduxSingleStudyViewer = (() => {
   });
 
   return withRouter(connect(mapStateToProps)(SingleStudyViewer));
-})();
-
-export const ReduxExportToWorkspace = (() => {
-  const mapStateToProps = (state) => ({
-    job: state.analysis.job,
-  });
-  const mapDispatchToProps = (dispatch) => ({
-    submitJob: (body) => dispatch(dispatchJob(body)),
-    checkJobStatus: () => dispatch(checkJob()),
-    fetchJobResult: (jobId) => dispatch(fetchJobResult(jobId)),
-    resetJobState: () => dispatch(resetJobState()),
-  });
-
-  return withRouter(connect(mapStateToProps, mapDispatchToProps)(ExportToWorkspace));
 })();

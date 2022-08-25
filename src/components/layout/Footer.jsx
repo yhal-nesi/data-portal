@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { basename } from '../../localconf';
 import './Footer.less';
-
-const cleanBasename = basename.replace(/(dev.html$)/, '');
 
 class Footer extends Component {
   render() {
@@ -54,7 +51,7 @@ class Footer extends Component {
                 >
                   <img
                     className='footer__img'
-                    src={(cleanBasename === '/') ? logoObj.src : `${cleanBasename}${logoObj.src}`}
+                    src={logoObj.src}
                     alt={logoObj.alt}
                     style={{ height: logoObj.height ? logoObj.height : 60 }}
                   />
@@ -97,7 +94,7 @@ const LogoObject = PropTypes.shape({
 });
 
 const FooterLink = PropTypes.shape({
-  text: PropTypes.string,
+  text: PropTypes.string.isRequired,
   href: PropTypes.string.isRequired,
 });
 

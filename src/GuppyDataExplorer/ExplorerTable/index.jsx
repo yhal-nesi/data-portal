@@ -4,10 +4,10 @@ import _ from 'lodash';
 import pluralize from 'pluralize';
 import ReactTable from 'react-table';
 import { Switch } from 'antd';
+import { withRouter } from 'react-router-dom';
 import 'react-table/react-table.css';
 import IconicLink from '../../components/buttons/IconicLink';
 import { GuppyConfigType, TableConfigType } from '../configTypeDef';
-import { hostname } from '../../localconf';
 import { capitalizeFirstLetter, humanFileSize } from '../../utils';
 import './ExplorerTable.css';
 import LockIcon from '../../img/icons/lock.svg';
@@ -135,17 +135,6 @@ class ExplorerTable extends React.Component {
             return rowComp;
           }
         }
-
-        // if this field is the `dicomViewerId`, convert the value to a link to the DICOM viewer
-        if (this.props.tableConfig.dicomViewerId && this.props.tableConfig.dicomViewerId === field && valueStr) {
-          const dicomViewerLink = `${hostname}dicom-viewer/viewer/${valueStr}`;
-          if (this.props.tableConfig.linkFields.includes(field)) { // link button
-            valueStr = dicomViewerLink;
-          } else { // direct link
-            return (<div><span title={valueStr}><a href={dicomViewerLink} target='_blank' rel='noreferrer'>{valueStr}</a></span></div>);
-          }
-        }
-
         // handling some special field types
         switch (field) {
         case this.props.guppyConfig.downloadAccessor:
@@ -162,7 +151,6 @@ class ExplorerTable extends React.Component {
                 icon='exit'
                 dictIcons={dictIcons}
                 iconColor='#606060'
-                target='_blank'
                 isExternal
               />
             )
@@ -171,8 +159,8 @@ class ExplorerTable extends React.Component {
           return valueStr
             ? (
               <a
-                href={'discovery/TAONGA-' + valueStr}
-                onClick={() => this.props.history.push('discovery/TAONGA-' + valueStr)}
+                href={'/study-viewer/project/' + valueStr}
+                onClick={() => this.props.history.push('/study-viewer/project/' + valueStr)}
               >{valueStr}</a>
             )
             : null;
@@ -432,4 +420,4 @@ ExplorerTable.defaultProps = {
   defaultPageSize: 20,
 };
 
-export default ExplorerTable;
+export default withRouter(ExplorerTable);

@@ -10,9 +10,7 @@ import { userHasCreateOrUpdateOnAnyProject } from '../authMappingUtils';
 class Introduction extends Component {
   render() {
     let buttonText = 'Submit Data';
-    if (this.props.data.buttonText) {
-      ({ buttonText } = this.props.data);
-    } else if (useArboristUI) {
+    if (useArboristUI) {
       if (userHasCreateOrUpdateOnAnyProject(this.props.userAuthMapping)) {
         buttonText = 'Submit/Browse Data';
       } else {
@@ -48,8 +46,7 @@ class Introduction extends Component {
         </div>
         <button
           className='button-primary-orange'
-          //onClick={() => this.props.history.push('/study-viewer/project')}
-          onClick={() => this.props.history.push('/discovery')}
+          onClick={() => this.props.history.push('/study-viewer/project')}
         >Projects</button>
         <br/><br/>
         <a className='introduction__icon' target='_blank' href='https://forms.gle/DckjEmzHNE5Tj9gR8'><button className='button-primary-white'>Submit Data&ensp;</button></a>
