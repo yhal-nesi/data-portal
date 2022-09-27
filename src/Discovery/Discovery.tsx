@@ -4,6 +4,7 @@ import {
   Tag, Popover, Space, Collapse, Button, Dropdown, Menu, Pagination, Tooltip,
 } from 'antd';
 import {
+  LockOutlined,
   UnlockOutlined,
   ClockCircleOutlined,
   DashOutlined,
@@ -36,6 +37,7 @@ export enum AccessLevel {
   UNACCESSIBLE = 2,
   PENDING = 3,
   NOT_AVAILABLE = 4,
+  OTHER = 5,
 }
 
 export enum AccessSortDirection {
@@ -46,7 +48,30 @@ const { Panel } = Collapse;
 
 const ARBORIST_READ_PRIV = 'read';
 
-const getTagColor = (tagCategory: string, config: DiscoveryConfig): string => {
+const setUpMenuItemInfo = (menuItemInfo, supportedValues) => {
+  if (supportedValues.accessible.enabled === true) {
+    menuItemInfo.push(
+      [AccessLevel.ACCESSIBLE, supportedValues.accessible.menuText, <UnlockOutlined />],
+    );
+  }
+  if (supportedValues.unaccessible.enabled === true) {
+    menuItemInfo.push(
+      [AccessLevel.UNACCESSIBLE, supportedValues.unaccessible.menuText, <LockOutlined />],
+    );
+  }
+  if (supportedValues.pending.enabled === true) {
+    menuItemInfo.push(
+      [AccessLevel.PENDING, supportedValues.pending.menuText, <ClockCircleOutlined />],
+    );
+  }
+  if (supportedValues.notAvailable.enabled === true) {
+    menuItemInfo.push(
+      [AccessLevel.NOT_AVAILABLE, supportedValues.notAvailable.menuText, <DashOutlined />],
+    );
+  }
+};
+
+export const getTagColor = (tagCategory: string, config: DiscoveryConfig): string => {
   const categoryConfig = config.tagCategories.find((category) => category.name === tagCategory);
   if (categoryConfig === undefined) {
     return 'gray';
@@ -78,7 +103,7 @@ const accessibleDataFilterToggle = () => {
   }
 };
 
-export const renderFieldContent = (content: any, contentType: 'string'|'paragraphs'|'number'|'link'|'button'|'tags' = 'string', config: DiscoveryConfig): React.ReactNode => {
+export const renderFieldContent = (content: any, contentType: 'string'|'paragraphs'|'number'|'link'|'button'|'localcontextshub'|'tags' = 'string', config: DiscoveryConfig): React.ReactNode => {
   switch (contentType) {
   case 'string':
     if (Array.isArray(content)) {
@@ -116,6 +141,35 @@ export const renderFieldContent = (content: any, contentType: 'string'|'paragrap
           </div>
       </div>
     );
+  case 'localcontextshub':
+    if (!content || !content.map) {
+      return null;
+    }
+
+    return content.map(({ projectID, projectTitle, projectLink, projectDetails }) => {
+      return (
+        <div key={projectID}>
+        <div className='discovery-modal__attribute-name'>
+            <a href={projectLink}> {projectTitle} </a>
+        </div>
+        <div className='discovery-modal__attribute-value'>
+          <table className='discovery-modal__attribute-tablerow'>
+            {
+              projectDetails.map(({ description, imgref }) => {
+                return (
+                  <tr>
+                    <td>{description}</td>
+                    <td> <img height="50" src={imgref} /> </td>
+                  </tr>
+                );
+            })}
+          </table>
+        </div>
+        </div>
+      );
+    });
+
+ 
  
   case 'tags':
     if (!content || !content.map) {
@@ -383,8 +437,9 @@ const Discovery: React.FunctionComponent<Props> = (props: Props) => {
         }
         if (column.valueIfNotAvailable) {
           renderedCell = column.valueIfNotAvailable;
+        } else {
+          renderedCell = 'Not available';
         }
-        renderedCell = 'Not available';
       } else {
         const columnIsSearchable = config.features.search.searchBar.searchableTextFields
           ? config.features.search.searchBar.searchableTextFields.indexOf(column.field) !== -1
@@ -486,22 +541,20 @@ const Discovery: React.FunctionComponent<Props> = (props: Props) => {
     );
   }
   if (config.features.authorization.enabled) {
+    const menuItemInfo = [];
+    setUpMenuItemInfo(menuItemInfo, config.features.authorization.supportedValues);
     columns.push({
       title: (
         <div className='discovery-table-header'>
           <Space size={'small'}>
             <div>Data Availability</div>
-            <Tooltip title={'Filter by data access'}>
+            <Tooltip title={config.features.authorization.columnTooltip}>
               <Dropdown
                 visible={accessibilityFilterVisible}
                 overlay={(
                   <Menu>
                     {
-                      [
-                        [AccessLevel.ACCESSIBLE, 'Available', <UnlockOutlined />],
-                        [AccessLevel.NOT_AVAILABLE, 'Not Available', <DashOutlined />],
-                        [AccessLevel.PENDING, 'Pending', <ClockCircleOutlined />],
-                      ].map(
+                      menuItemInfo.map(
                         ([accessLevel, accessDescriptor, icon]: any[]) => (
                           <MenuItem key={accessLevel.toString()}>
                             <Checkbox
@@ -640,29 +693,30 @@ const Discovery: React.FunctionComponent<Props> = (props: Props) => {
             </Popover>
           );
         }
-        return <React.Fragment />;
         /* Hiding the closed lock for the HEAL project.
           This may be useful functionality for other commons.
           Keeping the logic for now.
            https://ctds-planx.atlassian.net/browse/HP-393
         */
-        // return (
-        //   <Popover
-        //     overlayClassName='discovery-popover'
-        //     placement='topRight'
-        //     arrowPointAtCenter
-        //     title={'You do not have access to this study.'}
-        //     content={(
-        //       <div className='discovery-popover__text'>
-        //         <React.Fragment>You don&apos;t have <code>{ARBORIST_READ_PRIV}</code> access to</React.Fragment>
-        //         <React.Fragment><code>{record[config.minimalFieldMapping.authzField]}</code>.</React.Fragment>
-        //       </div>
-        //     )}
-        //   >
-        //     {/* <EyeInvisibleOutlined className='discovery-table__access-icon' /> */}
-        //     ---
-        //   </Popover>
-        // );
+        if (record[accessibleFieldName] === AccessLevel.UNACCESSIBLE) {
+          return (
+            <Popover
+              overlayClassName='discovery-popover'
+              placement='topRight'
+              arrowPointAtCenter
+              title={'You do not have access to this study.'}
+              content={(
+                <div className='discovery-popover__text'>
+                  <React.Fragment>You don&apos;t have <code>{ARBORIST_READ_PRIV}</code> access to</React.Fragment>
+                  <React.Fragment><code>{record[config.minimalFieldMapping.authzField]}</code>.</React.Fragment>
+                </div>
+              )}
+            >
+              <LockOutlined className='discovery-table__access-icon' />
+            </Popover>
+          );
+        }
+        return <React.Fragment />;
       },
     });
   }
@@ -812,6 +866,8 @@ const Discovery: React.FunctionComponent<Props> = (props: Props) => {
               setModalData={setModalData}
               setModalVisible={setModalVisible}
               columns={columns}
+              selectedTags={props.selectedTags}
+              onTagsSelected={props.onTagsSelected}
               accessibleFieldName={accessibleFieldName}
               selectedResources={props.selectedResources}
               onResourcesSelected={props.onResourcesSelected}

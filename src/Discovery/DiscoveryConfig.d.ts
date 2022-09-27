@@ -54,6 +54,9 @@ export interface DiscoveryConfig {
         tagsColumn?: {
             enabled: boolean,
         },
+        tagsInDescription?: {
+            enabled: boolean,
+        },
         advSearchFilters?: {
             enabled: boolean,
             field: string,
@@ -76,7 +79,7 @@ export interface DiscoveryConfig {
     studyColumns: {
         name: string
         field: string
-        contentType?: 'string' | 'number' | 'link'
+        contentType?: 'string' | 'number' | 'link' | 'localcontextshub' | 'button'
         errorIfNotAvailable?: boolean
         valueIfNotAvailable?: string | number
         ellipsis?: boolean
@@ -149,7 +152,7 @@ export interface DiscoveryConfig {
 export interface StudyPageFieldConfig {
     name: string
     field: string
-    contentType: 'string' | 'number' | 'paragraphs' | 'link' | 'tags'
+    contentType: 'string' | 'number' | 'paragraphs' | 'link' | 'tags' | 'localcontextshub' | 'button'
     includeName?: boolean
     includeIfNotAvailable?: boolean
     valueIfNotAvailable?: string | number
