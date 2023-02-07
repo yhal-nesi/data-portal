@@ -13,6 +13,7 @@ import { Helmet } from 'react-helmet';
 import { datadogRum } from '@datadog/browser-rum';
 
 import StaticAbout from './StaticPages/StaticAbout';
+import StaticCollaborate from './StaticPages/StaticCollaborate';
 import StaticKakapo from './StaticPages/StaticKakapo';
 import StaticKeakaka from './StaticPages/StaticKeakaka';
 import StaticTrevally from './StaticPages/StaticTrevally';
@@ -357,6 +358,11 @@ async function init() {
                     exact
                     path='/about'
                     component={StaticAbout}
+                  />
+                  <Route
+                    exact
+                    path='/collaborate'
+                    component={StaticCollaborate}
                   />
                   <Route
                     exact

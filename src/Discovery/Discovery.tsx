@@ -159,7 +159,7 @@ export const renderFieldContent = (content: any, contentType: 'string'|'paragrap
                 return (
                   <tr>
                     <td>{description}</td>
-                    <td> <img height="50" src={imgref} /> </td>
+                    <td> <img height="50" src={imgref} style={{ marginLeft: "2px" }}/> </td>
                   </tr>
                 );
             })}
