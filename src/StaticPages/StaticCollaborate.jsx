@@ -7,7 +7,7 @@ class StaticCollaborate extends React.Component {
       <div className='protected-content '>
         <div className='index-page'>
           <div className='index-page__top'>
-            <Row gutter={16} justify='center'>
+            <Row gutter={16} justify='center' align='middle'>
               <Col className='gutter-row' md={2} />
               <Col className='gutter-row' md={4} sm={24}>
                 <img

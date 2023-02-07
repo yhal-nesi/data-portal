@@ -30,6 +30,7 @@ import IcoStatusReady from './status_ready.svg';
 import IcoUpload from './upload.svg';
 import IcoUploadWhite from './upload-white.svg';
 import IcoWorkspace from './workspace.svg';
+import IcoCollaborate from './collaborate.svg'
 import IcoStageAccess from './stage-icons/stage-access.svg';
 import IcoStageAnalyze from './stage-icons/stage-analyze.svg';
 import IcoStageExplore from './stage-icons/stage-explore.svg';
@@ -50,7 +51,6 @@ import IcoMLayer21 from './iconmonstr/iconmonstr-layer-21.svg';
 import IcoMSpeech29 from './iconmonstr/iconmonstr-speech-bubble-29.svg';
 import IcoMFingerprint7 from './iconmonstr/iconmonstr-fingerprint-7.svg';
 import IcoMHelp4 from './iconmonstr/iconmonstr-help-4.svg';
-
 
 const dictIcons = {
   analysis: (height, customedStyles) => (
@@ -190,6 +190,9 @@ const dictIcons = {
   ),
   workspace: (height, customedStyles) => (
     <IcoWorkspace height={height} style={{ ...customedStyles }} />
+  ),
+  collaborate: (height, customedStyles) => (
+    <IcoCollaborate height={height} style={{ ...customedStyles }} />
   ),
   uchicago: (height, customedStyles) => (
     <IcoSignature
