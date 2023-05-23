@@ -38,6 +38,8 @@ export interface DiscoveryConfig {
             }
         },
         authorization: {
+            columnTooltip: string
+            supportedValues: any
             enabled: boolean,
             // requestAccess: { // not supported
             //     enabled: boolean,
@@ -51,12 +53,18 @@ export interface DiscoveryConfig {
             //     }
             // }
         },
+        tagsColumn?: {
+            enabled: boolean,
+        },
+        tagsInDescription?: {
+            enabled: boolean,
+        },
         advSearchFilters?: {
             enabled: boolean,
             field: string,
+            displayName?: string,
             filters: {
                 key: string
-                // multiSelectBehavior?: 'AND' | 'OR' // defaults to OR // not yet supported
                 keyDisplayName?: string
                 valueDisplayNames?: {
                     [value: string]: string
@@ -120,7 +128,7 @@ export interface DiscoveryConfig {
                 fields: {
                     type: 'block' | 'text' | 'link' | 'textList' | 'linkList' | 'accessDescriptor' | 'tags'
                     sourceField?: string
-                    label?: string
+                    label: string
                     // optionally refine tags by categories
                     categories?: string[]
                 }[]
