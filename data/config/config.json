@@ -1,0 +1,89 @@
+{
+    "gaTrackingId": "UA-119127212-1",
+    "ddEnv": "dev",
+    "components": {
+      "appName": "Aotearoa Genomic Data Repository",
+      "index": {
+        "introduction": {
+          "heading": "Aotearoa Genomic Data Repository",
+          "text": "The Aotearoa Genomic Data Repository has been jointly developed by Genomics Aoteoroa and NeSI to provide a secure place for the New Zealand research community to store and share genomic data. Version 1.0 of the repository is up and running, but we are still adding functionality, so you will see ongoing improvements as we implement new features.",
+          "link": "/submission"
+        },
+        "buttons": [
+        ],
+        "homepageChartNodes": [
+          {
+            "node": "project",
+            "name": "Projects"
+          },
+          {
+            "node": "experiment",
+            "name": "Experiments"
+          }
+        ]
+      },
+      "topBar": {
+        "items": [
+        ]
+      },
+      "footerLogos": [
+      ],
+      "login": {
+        "title": "Aotearoa Genomic Data Repository",
+        "subTitle": "Explore and Share Data",
+        "text": "This website is a data repository commissioned by Genomics Aotearoa for New Zealand's genomics researchers to host their high value genome data.",
+        "contact": "Please direct your feedback for the development team at NeSI.",
+        "email": "gasupport@nesi.org.nz"
+      },
+      "certs": {
+        "privacyPolicy": {
+          "text": "testing"
+        }
+      },
+      "categorical9Colors": [
+        "#07a551", 
+        "#175676", 
+        "#ee1d24", 
+        "#eb048d", 
+        "#414099", 
+        "#FFA630", 
+        "#AE8799", 
+        "#1A535C", 
+        "#462255"
+      ],
+      "categorical2Colors": [
+        "#6d6e70", 
+        "#c02f42"
+      ]
+    },
+    "requiredCerts": [],
+    "featureFlags": {
+      "explorer": true,
+      "explorerPublic": true
+    },
+    "graphql": {
+      "boardCounts": [
+        {
+          "graphql": "_experiment_count",
+          "name": "Experiment",
+          "plural": "Experiments"
+        },
+        {
+          "graphql": "_aliquot_count",
+          "name": "Aliquot",
+          "plural": "Aliquots"
+        }
+      ],
+      "chartCounts": [
+        {
+          "graphql": "_experiment_count",
+          "name": "Experiment"
+        },
+        {
+          "graphql": "_aliquot_count",
+          "name": "Aliquot"
+        }
+      ],
+      "projectDetails": "boardCounts"
+    }
+  }
